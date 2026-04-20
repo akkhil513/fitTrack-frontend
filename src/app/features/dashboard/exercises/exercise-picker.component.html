@@ -1,0 +1,57 @@
+<div class="backdrop" (click)="close.emit()"></div>
+
+<div class="sheet">
+  <div class="handle"></div>
+  <button class="close-btn" (click)="close.emit()">✕</button>
+
+  <div class="picker-title">FIND EXERCISE</div>
+
+  <!-- Search -->
+  <div class="search-row">
+    <input
+      [(ngModel)]="searchQuery"
+      placeholder="Search exercises..."
+      (keyup.enter)="search()"
+      class="search-input">
+    <button class="search-btn" (click)="search()">GO</button>
+  </div>
+
+  <!-- Body Part Filter -->
+  <div class="bodypart-scroll">
+    @for (part of bodyParts; track part) {
+      <button class="part-btn"
+        [class.active]="selectedBodyPart() === part"
+        (click)="filterByBodyPart(part)">
+        {{part | titlecase}}
+      </button>
+    }
+  </div>
+
+  <!-- Results -->
+  @if (loading()) {
+    <div class="loading">Searching...</div>
+  }
+
+  @for (ex of results(); track ex.id) {
+    <div class="result-card">
+      <img [src]="exerciseService.getImageUrl(ex.id)" [alt]="ex.name" class="result-gif">
+      <div class="result-info">
+        <div class="result-name">{{ex.name | titlecase}}</div>
+        <div class="result-meta">{{ex.target}} · {{ex.equipment}}</div>
+      </div>
+      <div class="result-actions">
+        <button class="btn-how" (click)="viewDetail(ex)">HOW?</button>
+        <button class="btn-use" (click)="pick(ex)">USE</button>
+      </div>
+    </div>
+  }
+</div>
+
+<!-- Exercise Detail -->
+@if (selectedExercise()) {
+  <app-exercise-detail
+    [exercise]="selectedExercise()!"
+    (close)="selectedExercise.set(null)"
+    (selectAlternative)="pick($event)">
+  </app-exercise-detail>
+}

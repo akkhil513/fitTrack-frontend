@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap');
+
+    .log-tabs { display:flex; gap:2px; margin-bottom:16px; }
+    .log-tabs button { flex:1; padding:8px; background:#111; border:1px solid #2a2a2a; color:#555; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:1px; cursor:pointer; border-radius:4px; transition:all 0.2s; }
+    .log-tabs button.active { background:#e8ff47; color:#000; border-color:#e8ff47; }
+
+    .log-card { background:#111; border:1px solid #2a2a2a; border-radius:8px; padding:16px; display:flex; flex-direction:column; gap:12px; }
+    .log-card-title { font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:2px; color:#e8ff47; }
+    .section-title { font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:2px; color:#555; margin-bottom:12px; }
+
+    .field-group { display:flex; flex-direction:column; gap:5px; }
+    .field-group label { font-size:10px; color:#555; text-transform:uppercase; letter-spacing:2px; font-family:'DM Mono',monospace; }
+    .field-group input, .field-group select, .field-group textarea {
+      background:#1a1a1a; border:1px solid #2a2a2a; border-radius:4px;
+      color:#f0f0f0; font-family:'DM Sans',sans-serif; font-size:14px;
+      padding:8px 10px; outline:none; transition:border-color 0.2s; width:100%;
+    }
+    .field-group input:focus, .field-group select:focus, .field-group textarea:focus { border-color:#e8ff47; }
+    .field-group textarea { resize:none; height:60px; }
+    .field-group select option { background:#1a1a1a; }
+
+    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+
+    .ex-header { font-size:10px; color:#444; font-family:'DM Mono',monospace; letter-spacing:1px; padding:0 2px; margin-bottom:8px; }
+
+    .exercise-block { background:#1a1a1a; border:1px solid #2a2a2a; border-radius:8px; padding:12px; margin-bottom:10px; }
+    .ex-name-row { display:flex; gap:6px; align-items:center; margin-bottom:10px; }
+    .ex-name-select { flex:1; background:#111; border:1px solid #2a2a2a; border-radius:4px; color:#f0f0f0; font-family:'DM Sans',sans-serif; font-size:13px; padding:8px 10px; outline:none; }
+    .ex-name-select:focus { border-color:#e8ff47; }
+    .ex-name-select option { background:#1a1a1a; }
+    .btn-how-sm { background:#1a1a1a; border:1px solid #2a2a2a; border-radius:4px; color:#555; font-family:'DM Mono',monospace; font-size:12px; padding:6px 10px; cursor:pointer; transition:all 0.2s; flex-shrink:0; }
+    .btn-how-sm:hover { border-color:#47c8ff; color:#47c8ff; }
+
+    .sets-header { display:grid; grid-template-columns:30px 1fr 1fr 30px; gap:6px; font-size:10px; color:#444; font-family:'DM Mono',monospace; letter-spacing:1px; margin-bottom:6px; padding:0 2px; }
+    .set-row { display:grid; grid-template-columns:30px 1fr 1fr 30px; gap:6px; margin-bottom:6px; align-items:center; }
+    .set-num { font-family:'Bebas Neue',sans-serif; font-size:16px; color:#e8ff47; text-align:center; }
+    .set-val { background:#111; border:1px solid #2a2a2a; border-radius:4px; color:#f0f0f0; font-family:'DM Mono',monospace; font-size:14px; padding:8px 6px; outline:none; text-align:center; width:100%; }
+    .set-val:focus { border-color:#e8ff47; }
+    .btn-remove-set { width:26px; height:26px; background:transparent; border:1px solid #2a2a2a; border-radius:4px; color:#555; font-size:16px; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; justify-content:center; }
+    .btn-remove-set:hover { border-color:#f87171; color:#f87171; }
+    .btn-add-set { width:100%; padding:6px; background:transparent; border:1px dashed #2a2a2a; border-radius:4px; color:#555; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:1px; cursor:pointer; transition:all 0.2s; margin-top:4px; }
+    .btn-add-set:hover { border-color:#e8ff47; color:#e8ff47; }
+
+    .btn-remove-ex { background:transparent; border:none; color:#555; cursor:pointer; font-size:14px; transition:color 0.2s; padding:4px; }
+    .btn-remove-ex:hover { color:#f87171; }
+
+    .btn-add { width:100%; padding:8px; background:#1a1a1a; border:1px dashed #2a2a2a; border-radius:4px; color:#555; font-family:'DM Mono',monospace; font-size:12px; letter-spacing:1px; cursor:pointer; transition:all 0.2s; }
+    .btn-add:hover { border-color:#e8ff47; color:#e8ff47; }
+
+    .btn-primary { width:100%; padding:12px; background:#e8ff47; color:#000; border:none; border-radius:4px; font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:2px; cursor:pointer; transition:opacity 0.2s; }
+    .btn-primary:hover { opacity:0.85; }
+    .btn-primary:disabled { opacity:0.4; cursor:not-allowed; }
+
+    .targets { display:flex; flex-direction:column; gap:6px; }
+    .target-row { display:flex; justify-content:space-between; font-size:12px; color:#555; font-family:'DM Mono',monospace; padding:6px 0; border-bottom:1px solid #1a1a1a; }
+    .target-row .hit { color:#4ade80; }
+    .target-row .miss { color:#f87171; }
+
+    .success-msg { background:#4ade8022; border:1px solid #4ade80; border-radius:4px; padding:8px 12px; font-size:12px; color:#4ade80; font-family:'DM Mono',monospace; }
+
+    .history-card { background:#111; border:1px solid #2a2a2a; border-radius:8px; padding:14px; margin-bottom:8px; }
+    .history-header { display:flex; justify-content:space-between; margin-bottom:8px; }
+    .history-day { font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:1px; color:#e8ff47; }
+    .history-date { font-size:11px; color:#555; font-family:'DM Mono',monospace; }
+    .history-session { font-size:12px; color:#888; margin-bottom:6px; font-family:'DM Mono',monospace; }
+    .history-ex { display:flex; justify-content:space-between; font-size:12px; padding:4px 0; border-bottom:1px solid #1a1a1a; color:#ccc; }
+    .ex-result { font-family:'DM Mono',monospace; color:#e8ff47; }
+    .nutrition-summary { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; font-size:11px; color:#555; font-family:'DM Mono',monospace; }
+    .empty-state { text-align:center; padding:40px 20px; color:#555; font-size:13px; }
+    .empty-icon { font-size:32px; margin-bottom:10px; }
+
+    .food-entry { display:flex; align-items:center; justify-content:space-between; padding:8px 10px; background:#111; border:1px solid #2a2a2a; border-radius:6px; margin-bottom:6px; }
+    .food-entry-name { font-size:12px; font-weight:500; color:#f0f0f0; }
+    .food-entry-macros { font-size:11px; color:#555; font-family:'DM Mono',monospace; }
+    .btn-remove-food { background:transparent; border:none; color:#555; cursor:pointer; font-size:14px; }
+    .btn-remove-food:hover { color:#f87171; }
+
+    .btn-add-food { width:100%; padding:10px; background:transparent; border:1px dashed #2a2a2a; border-radius:6px; color:#555; font-family:'DM Mono',monospace; font-size:12px; letter-spacing:1px; cursor:pointer; transition:all 0.2s; }
+    .btn-add-food:hover { border-color:#e8ff47; color:#e8ff47; }
+
+    .nutrition-totals { display:flex; flex-direction:column; gap:6px; margin:8px 0; }
+    .total-row { display:flex; justify-content:space-between; font-size:12px; color:#555; font-family:'DM Mono',monospace; padding:6px 0; border-bottom:1px solid #1a1a1a; }
+    .total-row .hit { color:#4ade80; }
+    .total-row .miss { color:#f87171; }
+
+    .edit-btn {
+      font-size:10px; padding:3px 8px; background:transparent;
+      border:1px solid #2a2a2a; border-radius:3px; color:#555;
+      font-family:'DM Mono',monospace; cursor:pointer; transition:all 0.2s;
+    }
+    .edit-btn:hover { border-color:#e8ff47; color:#e8ff47; }
+  

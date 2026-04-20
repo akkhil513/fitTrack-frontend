@@ -1,0 +1,160 @@
+<div class="px-5 pb-6" style="padding-bottom:120px">
+
+  @if (loading()) {
+    <div class="loading-state">Loading profile...</div>
+  } @else {
+
+    <!-- Header -->
+    <div class="profile-header">
+      <div class="avatar">{{user()?.firstName?.charAt(0) || 'A'}}</div>
+      <div>
+        <div class="profile-name">{{user()?.firstName}} {{user()?.lastName}}</div>
+        <div class="profile-username">&#64;{{user()?.username || 'user'}}</div>
+        <div class="profile-stats">
+          <span class="stat-pill">DAY {{getDayNumber()}}</span>
+          <span class="stat-pill">{{getDaysRemaining()}} DAYS LEFT</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="section-tabs">
+      <button [class.active]="activeSection() === 'info'" (click)="activeSection.set('info')">PROFILE</button>
+      <button [class.active]="activeSection() === 'plan'" (click)="activeSection.set('plan')">MY PLAN</button>
+      <button [class.active]="activeSection() === 'measurements'" (click)="activeSection.set('measurements')">STATS</button>
+    </div>
+
+    <!-- PROFILE TAB -->
+    @if (activeSection() === 'info') {
+      <div class="section-card">
+        <div class="card-title">PERSONAL INFO</div>
+
+        <div class="field-group">
+          <label>Full Name</label>
+          <input type="text" [(ngModel)]="editName">
+        </div>
+        <div class="field-group">
+          <label>Username</label>
+          <input type="text" [value]="user()?.username || ''" disabled class="disabled">
+        </div>
+        <div class="field-group">
+          <label>Email</label>
+          <input type="text" [value]="user()?.email || ''" disabled class="disabled">
+        </div>
+        <div class="field-group">
+          <label>Challenge Start Date</label>
+          <input type="date" [(ngModel)]="editStartDate" [max]="today">
+          <span class="hint">Changing this recalculates your day numbers</span>
+        </div>
+
+        @if (savedMsg()) {
+          <div class="success-msg">{{savedMsg()}}</div>
+        }
+        <button class="btn-primary" (click)="saveProfile()" [disabled]="saving()">
+          {{saving() ? 'SAVING...' : 'SAVE CHANGES'}}
+        </button>
+      </div>
+    }
+
+    <!-- MY PLAN TAB -->
+    @if (activeSection() === 'plan') {
+      @if (plan()) {
+        <div class="plan-meta">Generated {{plan().createdAt | date:'mediumDate'}}</div>
+
+        <div class="plan-card strategy-card">
+          <div class="plan-label">🎯 STRATEGY</div>
+          <div class="plan-text">{{plan().strategy}}</div>
+        </div>
+
+        <div class="plan-card training-card">
+          <div class="plan-label">💪 TRAINING SPLIT</div>
+          @if (trainingSchedule()) {
+            @for (day of ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']; track day) {
+              @if (trainingSchedule()[day]) {
+                <div class="training-day">
+                  <div class="training-day-header">
+                    <span class="training-day-name">{{day}}</span>
+                    <span class="training-session">{{trainingSchedule()[day].session}}</span>
+                  </div>
+                  <div class="training-exercises">
+                    @for (ex of trainingSchedule()[day].exercises; track ex.name) {
+                      <div class="training-ex">
+                        <span class="ex-name">{{ex.name}}</span>
+                        <span class="ex-detail">{{ex.sets}}×{{ex.reps}}</span>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            }
+          }
+        </div>
+
+        <div class="plan-card nutrition-card">
+          <div class="plan-label">🥩 NUTRITION</div>
+          <div class="plan-text">{{plan().nutrition}}</div>
+        </div>
+
+        <div class="plan-card supplements-card">
+          <div class="plan-label">💊 SUPPLEMENTS</div>
+          <div class="plan-text">{{plan().supplements}}</div>
+        </div>
+
+        <div class="plan-card recovery-card">
+          <div class="plan-label">😴 RECOVERY</div>
+          <div class="plan-text">{{plan().recovery}}</div>
+        </div>
+
+        <button class="btn-regenerate" (click)="regeneratePlan()">🔄 REGENERATE PLAN</button>
+
+      } @else {
+        <div class="empty-state">
+          <div>📋</div>
+          <div>No plan yet.</div>
+          <button class="btn-primary" (click)="regeneratePlan()">START ONBOARDING</button>
+        </div>
+      }
+    }
+
+    <!-- STATS TAB -->
+    @if (activeSection() === 'measurements') {
+      @if (measurements()) {
+        <div class="measurements-grid">
+          <div class="measure-card">
+            <div class="measure-val">{{measurements().weight || '—'}}</div>
+            <div class="measure-label">WEIGHT (kg)</div>
+          </div>
+          <div class="measure-card">
+            <div class="measure-val">{{measurements().waist || '—'}}</div>
+            <div class="measure-label">WAIST (cm)</div>
+          </div>
+          <div class="measure-card">
+            <div class="measure-val">{{measurements().chest || '—'}}</div>
+            <div class="measure-label">CHEST (cm)</div>
+          </div>
+          <div class="measure-card">
+            <div class="measure-val">{{measurements().shoulders || '—'}}</div>
+            <div class="measure-label">SHOULDERS (cm)</div>
+          </div>
+          <div class="measure-card">
+            <div class="measure-val">{{measurements().armL || '—'}}</div>
+            <div class="measure-label">LEFT ARM (cm)</div>
+          </div>
+          <div class="measure-card">
+            <div class="measure-val">{{measurements().armR || '—'}}</div>
+            <div class="measure-label">RIGHT ARM (cm)</div>
+          </div>
+        </div>
+        <div class="hint" style="text-align:center;margin-top:8px">Update measurements in Progress tab</div>
+      } @else {
+        <div class="empty-state">
+          <div>📏</div>
+          <div>No measurements yet.</div>
+        </div>
+      }
+    }
+
+  }
+
+</div>
+  

@@ -1,0 +1,65 @@
+<!-- Backdrop -->
+<div class="backdrop" (click)="close.emit()"></div>
+
+<!-- Bottom Sheet -->
+<div class="sheet">
+
+  <!-- Handle -->
+  <div class="handle"></div>
+
+  <!-- Close -->
+  <button class="close-btn" (click)="close.emit()">✕</button>
+
+  <!-- Exercise Info -->
+  <div class="ex-header">
+    <div class="ex-name">{{exercise.name | titlecase}}</div>
+    <div class="ex-tags">
+      <span class="tag target">{{exercise.target}}</span>
+      <span class="tag equipment">{{exercise.equipment}}</span>
+      <span class="tag bodypart">{{exercise.bodyPart}}</span>
+    </div>
+  </div>
+
+  <!-- GIF -->
+  <div class="gif-container">
+    <img [src]="exerciseService.getImageUrl(exercise.id)" [alt]="exercise.name" class="exercise-gif">
+  </div>
+
+  <!-- Instructions -->
+  <div class="instructions">
+    <div class="section-label">HOW TO DO IT</div>
+    @for (step of exercise.instructions; track $index) {
+      <div class="step">
+        <div class="step-num">{{$index + 1}}</div>
+        <div class="step-text">{{step}}</div>
+      </div>
+    }
+  </div>
+
+  <!-- Alternatives -->
+  <div class="alts-section">
+    @if (!showAlts()) {
+      <button class="btn-alt" (click)="loadAlternatives()">
+        🔄 FIND ALTERNATIVES
+      </button>
+    }
+
+    @if (showAlts()) {
+      <div class="section-label">ALTERNATIVES</div>
+      @if (loadingAlts()) {
+        <div class="loading">Loading alternatives...</div>
+      }
+      @for (alt of alternatives(); track alt.id) {
+        <div class="alt-card" (click)="pickAlternative(alt)">
+          <img [src]="exerciseService.getImageUrl(alt.id)" [alt]="alt.name" class="alt-gif">
+          <div class="alt-info">
+            <div class="alt-name">{{alt.name | titlecase}}</div>
+            <div class="alt-target">{{alt.target}} · {{alt.equipment}}</div>
+          </div>
+          <div class="alt-select">USE →</div>
+        </div>
+      }
+    }
+  </div>
+
+</div>

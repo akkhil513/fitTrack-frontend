@@ -1,0 +1,81 @@
+<div class="wrap">
+      <div class="box">
+        <div class="brand">FITTRACK</div>
+
+        @if (step() === 'register') {
+          <div class="title">JOIN THE<br><span>CHALLENGE</span></div>
+          <div class="sub">Free forever — no credit card needed</div>
+
+          @if (error()) {
+            <div class="error-msg">⚠️ {{error()}}</div>
+          }
+
+          <div class="field">
+            <label>Full Name</label>
+            <input type="text" [(ngModel)]="name" placeholder="Akhil Gollapalli">
+          </div>
+
+          <div class="field">
+            <label>Username</label>
+            <div class="username-wrapper">
+              <input type="text" [(ngModel)]="username"
+                (ngModelChange)="onUsernameChange()"
+                placeholder="akhil_fit"
+                [class.available]="usernameStatus() === 'available'"
+                [class.taken]="usernameStatus() === 'taken'">
+              @if (usernameStatus() === 'checking') {
+                <span class="status-icon checking">...</span>
+              }
+              @if (usernameStatus() === 'available') {
+                <span class="status-icon available">✓</span>
+              }
+              @if (usernameStatus() === 'taken') {
+                <span class="status-icon taken">✗</span>
+              }
+            </div>
+            @if (usernameStatus() === 'taken') {
+              <span class="field-error">Username already taken</span>
+            }
+            @if (usernameStatus() === 'available') {
+              <span class="field-success">Username available</span>
+            }
+          </div>
+
+          <div class="field">
+            <label>Email</label>
+            <input type="email" [(ngModel)]="email" placeholder="you@email.com">
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="password" [(ngModel)]="password" placeholder="Min 8 chars, 1 uppercase, 1 number">
+          </div>
+
+          <button class="btn" (click)="signUp()"
+            [disabled]="auth.isLoading() || usernameStatus() === 'taken' || usernameStatus() === 'checking'">
+            {{auth.isLoading() ? 'CREATING...' : 'CREATE ACCOUNT →'}}
+          </button>
+          <div class="link-row">Have an account? <a routerLink="/auth/login">Sign in</a></div>
+
+        } @else {
+          <div class="title">CHECK YOUR<br><span>EMAIL</span></div>
+          <div class="sub">We sent a 6-digit code to<br><strong style="color:#f0f0f0">{{email}}</strong></div>
+
+          @if (error()) {
+            <div class="error-msg">⚠️ {{error()}}</div>
+          }
+
+          <div class="field">
+            <label>Verification Code</label>
+            <input type="text" [(ngModel)]="code" placeholder="123456" maxlength="6"
+              style="font-size:24px;letter-spacing:8px;text-align:center"
+              (keyup.enter)="confirm()">
+          </div>
+
+          <button class="btn" (click)="confirm()" [disabled]="auth.isLoading()">
+            {{auth.isLoading() ? 'VERIFYING...' : 'VERIFY →'}}
+          </button>
+          <div class="link-row"><a (click)="step.set('register')" style="cursor:pointer">← Back</a></div>
+        }
+      </div>
+    </div>
+  

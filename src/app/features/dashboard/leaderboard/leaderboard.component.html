@@ -1,0 +1,33 @@
+<div class="page">
+      <div class="section-title">LEADERBOARD</div>
+      <div class="sub">Only users who opted in are shown. <a routerLink="/dashboard/profile">Change your setting →</a></div>
+
+      @if (loading()) {
+        <div class="loading">Loading...</div>
+      } @else if (entries().length === 0) {
+        <div class="empty">
+          <div class="empty-icon">🏆</div>
+          <div>No public entries yet.</div>
+          <div style="font-size:12px;color:#444;margin-top:4px">Be the first — enable leaderboard in Profile.</div>
+        </div>
+      } @else {
+        @for (entry of entries(); track entry.userId; let i = $index) {
+          <div class="entry" [class.top]="i < 3">
+            <div class="rank" [style.color]="rankColor(i)">{{rankIcon(i)}}</div>
+            <div class="entry-info">
+              <div class="entry-name">{{entry.name}}</div>
+              <div class="entry-stats">
+                <span>Day {{entry.dayNumber}}</span>
+                <span>·</span>
+                <span>🔥 {{entry.streak}} streak</span>
+              </div>
+            </div>
+            <div class="entry-score">
+              <div class="score-val">{{entry.totalScore}}</div>
+              <div class="score-label">PTS</div>
+            </div>
+          </div>
+        }
+      }
+    </div>
+  

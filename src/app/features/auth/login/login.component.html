@@ -1,0 +1,27 @@
+<div class="wrap">
+      <div class="box">
+        <div class="brand">FITTRACK</div>
+        <div class="title">WELCOME<br><span>BACK</span></div>
+        <div class="sub">Sign in to your 100-day challenge</div>
+
+        @if (error()) {
+          <div class="error-msg">⚠️ {{error()}}</div>
+        }
+
+        <div class="field">
+          <label>Email</label>
+          <input type="email" [(ngModel)]="email" placeholder="you@example.com" (keyup.enter)="login()">
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" [(ngModel)]="password" placeholder="••••••••" (keyup.enter)="login()">
+        </div>
+
+        <button class="btn" (click)="login()" [disabled]="auth.isLoading()">
+          {{auth.isLoading() ? 'SIGNING IN...' : 'SIGN IN →'}}
+        </button>
+
+        <div class="link-row">No account? <a routerLink="/auth/register">Create one free</a></div>
+      </div>
+    </div>
+  

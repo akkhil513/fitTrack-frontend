@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap');
+
+    .section-title { font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:2px; color:#555; margin-bottom:12px; }
+    .mt-6 { margin-top:24px; }
+
+    .week-list { display:flex; flex-direction:column; gap:6px; }
+
+    .day-row {
+      display:grid; grid-template-columns:70px 1fr auto;
+      gap:8px; align-items:center;
+      padding:12px; background:#111; border:1px solid #2a2a2a;
+      border-radius:8px; margin-bottom:6px; cursor:pointer; transition:all 0.2s;
+    }
+    .day-row:hover { border-color:#444; }
+    .day-row.today { border-color:#e8ff47; background:#e8ff4708; }
+
+    .day-label { font-family:'Bebas Neue',sans-serif; font-size:11px; letter-spacing:1px; color:#444; text-transform:uppercase; flex-shrink:0; }
+    .day-label.today-text { color:#e8ff47; }
+    .day-info { min-width:0; }
+    .day-name { font-size:14px; font-weight:500; color:#f0f0f0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .day-muscles { font-size:11px; color:#555; font-family:'DM Mono',monospace; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:2px; }
+
+    .day-badge { font-family:'Bebas Neue',sans-serif; font-size:11px; letter-spacing:1px; padding:3px 8px; border-radius:4px; flex-shrink:0; }
+    .badge-push { background:#ff6b3522; color:#ff6b35; }
+    .badge-pull { background:#47c8ff22; color:#47c8ff; }
+    .badge-legs { background:#4ade8022; color:#4ade80; }
+    .badge-rest { background:#2a2a2a; color:#555; }
+    .badge-today { background:#e8ff47; color:#000; font-weight:600; }
+
+    .workout-card { background:#111; border:1px solid #2a2a2a; border-radius:8px; padding:16px; }
+    .workout-muscles { font-size:12px; color:#555; font-family:'DM Mono',monospace; margin-bottom:14px; }
+
+    .exercise-table { width:100%; border-collapse:collapse; }
+    .exercise-table th { font-size:10px; color:#444; font-family:'DM Mono',monospace; letter-spacing:1px; text-align:left; padding-bottom:10px; border-bottom:1px solid #2a2a2a; }
+    .exercise-table th:not(:first-child) { text-align:center; }
+    .exercise-table td { padding:10px 0; font-size:13px; color:#ccc; border-bottom:1px solid #1a1a1a; }
+    .exercise-table .center { text-align:center; font-family:'DM Mono',monospace; }
+    .exercise-table .accent { color:#e8ff47; font-size:14px; }
+    .exercise-table .muted { color:#888; font-size:12px; }
+    .exercise-table .dim { color:#555; font-size:11px; }
+
+    .rest-msg { text-align:center; padding:20px; color:#555; font-size:13px; }
+  

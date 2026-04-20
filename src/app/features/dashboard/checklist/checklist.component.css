@@ -1,0 +1,29 @@
+.page { padding: 0 20px 20px; }
+    .motivation { background:#111; border-left:3px solid #e8ff47; border-radius:4px; padding:12px 14px; font-size:13px; color:#888; font-style:italic; line-height:1.5; margin-bottom:16px; }
+    .score-card { background:#111; border:1px solid #2a2a2a; border-radius:8px; padding:16px; margin-bottom:20px; display:flex; align-items:center; gap:16px; }
+    .score-num { font-family:'Bebas Neue',sans-serif; font-size:52px; color:#e8ff47; line-height:1; flex-shrink:0; }
+    .score-num span { font-size:22px; color:#444; }
+    .score-right { flex:1; }
+    .score-title { font-size:14px; font-weight:600; margin-bottom:4px; }
+    .score-msg { font-size:12px; color:#555; margin-bottom:8px; }
+    .score-bar { height:4px; background:#2a2a2a; border-radius:2px; overflow:hidden; }
+    .score-bar-fill { height:100%; background:#e8ff47; border-radius:2px; transition:width 0.5s ease; }
+    .group { margin-bottom:20px; }
+    .group-label { font-size:10px; letter-spacing:3px; color:#ff6b35; text-transform:uppercase; font-family:'DM Mono',monospace; margin-bottom:8px; }
+    .check-item { display:flex; align-items:center; gap:12px; padding:12px 14px; background:#111; border:1px solid #2a2a2a; border-radius:6px; margin-bottom:6px; cursor:pointer; transition:all 0.2s; position:relative; overflow:hidden; }
+    .check-item::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:#2a2a2a; transition:background 0.2s; }
+    .check-item.done::before { background:#4ade80; }
+    .check-item.done { border-color:#4ade8018; }
+    .check-box { width:20px; height:20px; border:2px solid #2a2a2a; border-radius:4px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:12px; transition:all 0.2s; }
+    .check-item.done .check-box { background:#4ade80; border-color:#4ade80; color:#000; }
+    .check-info { flex:1; }
+    .check-name { font-size:14px; font-weight:500; transition:all 0.2s; }
+    .check-item.done .check-name { color:#444; text-decoration:line-through; }
+    .check-time { font-size:11px; color:#444; font-family:'DM Mono',monospace; margin-top:2px; }
+    .tag { font-size:10px; padding:3px 8px; border-radius:2px; font-family:'DM Mono',monospace; }
+    .meal { background:#ff6b3520; color:#ff6b35; }
+    .supp { background:#47c8ff20; color:#47c8ff; }
+    .train { background:#e8ff4720; color:#e8ff47; }
+    .water { background:#4ade8020; color:#4ade80; }
+    .sleep { background:#a855f720; color:#c084fc; }
+  

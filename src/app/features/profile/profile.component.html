@@ -1,89 +1,151 @@
-<div class="px-5 pb-6" style="padding-bottom:120px">
-
+<div class="px-5 pb-6" style="padding-bottom: 120px">
   @if (loading()) {
     <div class="loading-state">Loading profile...</div>
   } @else {
-
     <!-- Header -->
     <div class="profile-header">
-      <div class="avatar">{{user()?.firstName?.charAt(0) || 'A'}}</div>
-      <div>
-        <div class="profile-name">{{user()?.firstName}} {{user()?.lastName}}</div>
-        <div class="profile-username">&#64;{{user()?.username || 'user'}}</div>
-        <div class="profile-stats">
-          <span class="stat-pill">DAY {{getDayNumber()}}</span>
-          <span class="stat-pill">{{getDaysRemaining()}} DAYS LEFT</span>
+      <div class="avatar">{{ user()?.firstName?.charAt(0) || "A" }}</div>
+      <div class="profile-info">
+        <div class="profile-name">
+          {{ user()?.firstName }} {{ user()?.lastName }}
         </div>
+        <div class="profile-username">
+          &#64;{{ user()?.username || "user" }}
+        </div>
+        <div class="profile-stats">
+          <span class="stat-pill">DAY {{ getDayNumber() }}</span>
+          <span class="stat-pill">{{ getDaysRemaining() }} DAYS LEFT</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Challenge Timeline -->
+    <div class="timeline-card">
+      <div class="timeline-top">
+        <div class="timeline-label">100 DAY CHALLENGE</div>
+        <div class="timeline-pct">{{ getProgressPct() }}%</div>
+      </div>
+      <div class="timeline-bar">
+        <div class="timeline-fill" [style.width]="getProgressPct() + '%'"></div>
+      </div>
+      <div class="timeline-bottom">
+        <span class="timeline-sub">Day {{ getDayNumber() }} of 100</span>
+        <span class="timeline-sub"
+          >{{ getDaysRemaining() }} days remaining</span
+        >
       </div>
     </div>
 
     <!-- Tabs -->
     <div class="section-tabs">
-      <button [class.active]="activeSection() === 'info'" (click)="activeSection.set('info')">PROFILE</button>
-      <button [class.active]="activeSection() === 'plan'" (click)="activeSection.set('plan')">MY PLAN</button>
-      <button [class.active]="activeSection() === 'measurements'" (click)="activeSection.set('measurements')">STATS</button>
+      <button
+        [class.active]="activeSection() === 'info'"
+        (click)="activeSection.set('info')"
+      >
+        PROFILE
+      </button>
+      <button
+        [class.active]="activeSection() === 'plan'"
+        (click)="activeSection.set('plan')"
+      >
+        MY PLAN
+      </button>
+      <button
+        [class.active]="activeSection() === 'stats'"
+        (click)="activeSection.set('stats')"
+      >
+        STATS
+      </button>
     </div>
 
     <!-- PROFILE TAB -->
-    @if (activeSection() === 'info') {
+    @if (activeSection() === "info") {
       <div class="section-card">
         <div class="card-title">PERSONAL INFO</div>
-
         <div class="field-group">
           <label>Full Name</label>
-          <input type="text" [(ngModel)]="editName">
+          <input type="text" [(ngModel)]="editName" />
         </div>
         <div class="field-group">
           <label>Username</label>
-          <input type="text" [value]="user()?.username || ''" disabled class="disabled">
+          <input
+            type="text"
+            [value]="user()?.username || ''"
+            disabled
+            class="disabled"
+          />
         </div>
         <div class="field-group">
           <label>Email</label>
-          <input type="text" [value]="user()?.email || ''" disabled class="disabled">
+          <input
+            type="text"
+            [value]="user()?.email || ''"
+            disabled
+            class="disabled"
+          />
         </div>
         <div class="field-group">
           <label>Challenge Start Date</label>
-          <input type="date" [(ngModel)]="editStartDate" [max]="today">
+          <input type="date" [(ngModel)]="editStartDate"/>
           <span class="hint">Changing this recalculates your day numbers</span>
         </div>
-
         @if (savedMsg()) {
-          <div class="success-msg">{{savedMsg()}}</div>
+          <div class="success-msg">{{ savedMsg() }}</div>
         }
-        <button class="btn-primary" (click)="saveProfile()" [disabled]="saving()">
-          {{saving() ? 'SAVING...' : 'SAVE CHANGES'}}
+        <button
+          class="btn-primary"
+          (click)="saveProfile()"
+          [disabled]="saving()"
+        >
+          {{ saving() ? "SAVING..." : "SAVE CHANGES" }}
         </button>
       </div>
     }
 
     <!-- MY PLAN TAB -->
-    @if (activeSection() === 'plan') {
+    @if (activeSection() === "plan") {
       @if (plan()) {
-        <div class="plan-meta">Generated {{plan().createdAt | date:'mediumDate'}}</div>
+        <div class="plan-meta">
+          Generated {{ plan().createdAt | date: "mediumDate" }}
+        </div>
 
         <div class="plan-card strategy-card">
           <div class="plan-label">🎯 STRATEGY</div>
-          <div class="plan-text">{{plan().strategy}}</div>
+          <div class="plan-text">{{ plan().strategy }}</div>
         </div>
 
         <div class="plan-card training-card">
           <div class="plan-label">💪 TRAINING SPLIT</div>
           @if (trainingSchedule()) {
-            @for (day of ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']; track day) {
+            @for (
+              day of [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday",
+              ];
+              track day
+            ) {
               @if (trainingSchedule()[day]) {
                 <div class="training-day">
                   <div class="training-day-header">
-                    <span class="training-day-name">{{day}}</span>
-                    <span class="training-session">{{trainingSchedule()[day].session}}</span>
+                    <span class="training-day-name">{{ day }}</span>
+                    <span class="training-session">{{
+                      trainingSchedule()[day].session
+                    }}</span>
                   </div>
-                  <div class="training-exercises">
-                    @for (ex of trainingSchedule()[day].exercises; track ex.name) {
-                      <div class="training-ex">
-                        <span class="ex-name">{{ex.name}}</span>
-                        <span class="ex-detail">{{ex.sets}}×{{ex.reps}}</span>
-                      </div>
-                    }
-                  </div>
+                  @for (
+                    ex of trainingSchedule()[day].exercises;
+                    track ex.name
+                  ) {
+                    <div class="training-ex">
+                      <span class="ex-name">{{ ex.name }}</span>
+                      <span class="ex-detail">{{ ex.sets }}×{{ ex.reps }}</span>
+                    </div>
+                  }
                 </div>
               }
             }
@@ -92,69 +154,124 @@
 
         <div class="plan-card nutrition-card">
           <div class="plan-label">🥩 NUTRITION</div>
-          <div class="plan-text">{{plan().nutrition}}</div>
+          <div class="plan-text">{{ plan().nutrition }}</div>
         </div>
 
         <div class="plan-card supplements-card">
           <div class="plan-label">💊 SUPPLEMENTS</div>
-          <div class="plan-text">{{plan().supplements}}</div>
+          <div class="plan-text">{{ plan().supplements }}</div>
         </div>
 
         <div class="plan-card recovery-card">
           <div class="plan-label">😴 RECOVERY</div>
-          <div class="plan-text">{{plan().recovery}}</div>
+          <div class="plan-text">{{ plan().recovery }}</div>
         </div>
 
-        <button class="btn-regenerate" (click)="regeneratePlan()">🔄 REGENERATE PLAN</button>
-
+        <button class="btn-regenerate" (click)="regeneratePlan()">
+          🔄 REGENERATE PLAN
+        </button>
       } @else {
         <div class="empty-state">
           <div>📋</div>
           <div>No plan yet.</div>
-          <button class="btn-primary" (click)="regeneratePlan()">START ONBOARDING</button>
+          <button class="btn-primary" (click)="regeneratePlan()">
+            START ONBOARDING
+          </button>
         </div>
       }
     }
 
     <!-- STATS TAB -->
-    @if (activeSection() === 'measurements') {
-      @if (measurements()) {
-        <div class="measurements-grid">
-          <div class="measure-card">
-            <div class="measure-val">{{measurements().weight || '—'}}</div>
-            <div class="measure-label">WEIGHT (kg)</div>
+    @if (activeSection() === "stats") {
+      <div class="section-card">
+        <div class="card-title">UPDATE MEASUREMENTS</div>
+        <div class="hint" style="margin-top: -4px">
+          Update whenever Claude recommends or you measure
+        </div>
+
+        <div class="measure-grid">
+          <div class="measure-field">
+            <label>WEIGHT (kg)</label>
+            <input
+              type="number"
+              [(ngModel)]="newMeasure.weight"
+              placeholder="72.5"
+              step="0.1"
+            />
           </div>
-          <div class="measure-card">
-            <div class="measure-val">{{measurements().waist || '—'}}</div>
-            <div class="measure-label">WAIST (cm)</div>
+          <div class="measure-field">
+            <label>WAIST (cm)</label>
+            <input
+              type="number"
+              [(ngModel)]="newMeasure.waist"
+              placeholder="82"
+              step="0.5"
+            />
           </div>
-          <div class="measure-card">
-            <div class="measure-val">{{measurements().chest || '—'}}</div>
-            <div class="measure-label">CHEST (cm)</div>
+          <div class="measure-field">
+            <label>CHEST (cm)</label>
+            <input
+              type="number"
+              [(ngModel)]="newMeasure.chest"
+              placeholder="90"
+              step="0.5"
+            />
           </div>
-          <div class="measure-card">
-            <div class="measure-val">{{measurements().shoulders || '—'}}</div>
-            <div class="measure-label">SHOULDERS (cm)</div>
+          <div class="measure-field">
+            <label>SHOULDERS (cm)</label>
+            <input
+              type="number"
+              [(ngModel)]="newMeasure.shoulders"
+              placeholder="108"
+              step="0.5"
+            />
           </div>
-          <div class="measure-card">
-            <div class="measure-val">{{measurements().armL || '—'}}</div>
-            <div class="measure-label">LEFT ARM (cm)</div>
+          <div class="measure-field">
+            <label>LEFT ARM (cm)</label>
+            <input
+              type="number"
+              [(ngModel)]="newMeasure.armL"
+              placeholder="30"
+              step="0.5"
+            />
           </div>
-          <div class="measure-card">
-            <div class="measure-val">{{measurements().armR || '—'}}</div>
-            <div class="measure-label">RIGHT ARM (cm)</div>
+          <div class="measure-field">
+            <label>RIGHT ARM (cm)</label>
+            <input
+              type="number"
+              [(ngModel)]="newMeasure.armR"
+              placeholder="30"
+              step="0.5"
+            />
           </div>
         </div>
-        <div class="hint" style="text-align:center;margin-top:8px">Update measurements in Progress tab</div>
-      } @else {
-        <div class="empty-state">
-          <div>📏</div>
-          <div>No measurements yet.</div>
-        </div>
+
+        @if (measurementSavedMsg()) {
+          <div class="success-msg">{{ measurementSavedMsg() }}</div>
+        }
+        <button
+          class="btn-primary"
+          (click)="saveMeasurements()"
+          [disabled]="savingMeasurements()"
+        >
+          {{ savingMeasurements() ? "SAVING..." : "SAVE MEASUREMENTS" }}
+        </button>
+      </div>
+
+      <!-- Measurement History -->
+      @if (measurementHistory().length > 0) {
+        <div class="history-title">MEASUREMENT HISTORY</div>
+        @for (entry of measurementHistory(); track entry.date) {
+          <div class="history-entry">
+            <div class="history-date">{{ entry.date }}</div>
+            <div class="history-vals">
+              <span>⚖️ {{ entry.weight }}kg</span>
+              <span>📏 {{ entry.waist }}cm waist</span>
+              <span>💪 {{ entry.armL }}cm arm</span>
+            </div>
+          </div>
+        }
       }
     }
-
   }
-
 </div>
-  

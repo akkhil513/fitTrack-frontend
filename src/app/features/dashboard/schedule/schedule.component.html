@@ -1,57 +1,69 @@
 <div class="px-5 pb-6">
+  <div class="section-title">THIS WEEK</div>
 
-      <div class="section-title">THIS WEEK</div>
+  @if (loading()) {
+    <div class="loading">Loading your plan...</div>
+  }
 
-      @if (loading()) {
-        <div class="loading">Loading your plan...</div>
-      }
-
-      <div class="week-list">
-        @for (day of schedule(); track day.day) {
-          <div class="day-row" [class.today]="isToday(day.day)" (click)="selectDay(day)">
-            <div class="day-label" [class.today-text]="isToday(day.day)">{{day.day}}</div>
-            <div class="day-info">
-              <div class="day-name">{{day.session}}</div>
-              <div class="day-muscles">{{day.muscles}}</div>
-            </div>
-            <div class="day-badge" [class]="isToday(day.day) ? 'badge-today' : day.badge">
-              {{isToday(day.day) ? 'TODAY' : day.day.substring(0,3).toUpperCase()}}
-            </div>
-          </div>
-        }
+  <div class="week-list">
+    @for (day of schedule(); track day.day) {
+      <div
+        class="day-row"
+        [class.today]="isToday(day.day)"
+        (click)="selectDay(day)"
+      >
+        <div class="day-label" [class.today-text]="isToday(day.day)">
+          {{ day.day }}
+        </div>
+        <div class="day-info">
+          <div class="day-name">{{ day.session }}</div>
+          <div class="day-muscles">{{ day.muscles }}</div>
+        </div>
+        <div
+          class="day-badge"
+          [class]="isToday(day.day) ? 'badge-today' : day.badge"
+        >
+          {{
+            isToday(day.day) ? "TODAY" : day.day.substring(0, 3).toUpperCase()
+          }}
+        </div>
       </div>
+    }
+  </div>
 
-      @if (selectedDay()) {
-        <div class="section-title mt-6">{{selectedDay()!.session | uppercase}}</div>
-        <div class="workout-card">
-          <div class="workout-muscles">{{selectedDay()!.muscles}}</div>
+  @if (selectedDay()) {
+    <div class="section-title mt-6">
+      {{ selectedDay()!.session | uppercase }}
+    </div>
+    <div class="workout-card">
+      <div class="workout-muscles">{{ selectedDay()!.muscles }}</div>
 
-          @if (selectedDay()!.exercises.length > 0) {
-            <table class="exercise-table">
-              <thead>
-                <tr>
-                  <th>EXERCISE</th>
-                  <th>SETS</th>
-                  <th>REPS</th>
-                  <th>REST</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (ex of selectedDay()!.exercises; track ex.name) {
-                  <tr>
-                    <td>{{ex.name}}</td>
-                    <td class="center accent">{{ex.sets}}</td>
-                    <td class="center muted">{{ex.reps}}</td>
-                    <td class="center dim">{{ex.rest}}</td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          } @else {
-            <div class="rest-msg">🧘 Rest or active recovery — go for a walk and stretch.</div>
-          }
+      @if (selectedDay()!.exercises.length > 0) {
+        <table class="exercise-table">
+          <thead>
+            <tr>
+              <th>EXERCISE</th>
+              <th>SETS</th>
+              <th>REPS</th>
+              <th>REST</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (ex of selectedDay()!.exercises; track ex.name) {
+              <tr>
+                <td>{{ ex.name }}</td>
+                <td class="center accent">{{ ex.sets }}</td>
+                <td class="center muted">{{ ex.reps }}</td>
+                <td class="center dim">{{ ex.rest }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      } @else {
+        <div class="rest-msg">
+          🧘 Rest or active recovery — go for a walk and stretch.
         </div>
       }
-
     </div>
-  
+  }
+</div>

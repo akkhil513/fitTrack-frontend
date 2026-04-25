@@ -1,60 +1,58 @@
-<div class="min-h-screen pb-24" style="background:#0a0a0a;color:#f0f0f0;font-family:'DM Sans',sans-serif">
-
-      <!-- TOP BAR -->
-      <div class="flex justify-between items-center px-5 pt-6 pb-4">
-        <div>
-          <div class="text-xs font-mono tracking-widest mb-1" style="color:#555;font-family:'DM Mono',monospace">FITTRACK · 100 DAY CHALLENGE</div>
-          <div class="text-2xl font-display tracking-wide" style="font-family:'Bebas Neue',sans-serif">
-            HEY, {{userName()}} 👋
-          </div>
-        </div>
-        <div class="flex items-center gap-3">
-          <div class="day-pill">
-            {{dayNumber() === 0 ? 'DAY 0 — GETTING READY' : 'DAY ' + dayNumber()}}
-          </div>
-          <button (click)="signOut()" class="logout-btn">SIGN OUT</button>
-        </div>
-      </div>
-
-      <!-- DROPDOWN MENU -->
-      @if (menuOpen()) {
-        <div class="dropdown-menu">
-          <div class="dropdown-email">{{userEmail()}}</div>
-          <button class="dropdown-item" routerLink="/dashboard/profile" (click)="menuOpen.set(false)">⚙️ Profile & Settings</button>
-          <button class="dropdown-item" (click)="signOut()">🚪 Sign Out</button>
-        </div>
-        <div class="dropdown-backdrop" (click)="menuOpen.set(false)"></div>
-      }
-
-      <!-- ROUTER OUTLET -->
-      <router-outlet />
-
-      <!-- BOTTOM NAV -->
-      <nav class="bottom-nav">
-        <a routerLink="today" routerLinkActive="active" class="nav-item">
-          <span class="nav-icon">✓</span>
-          <span class="nav-label">TODAY</span>
-        </a>
-        <a routerLink="schedule" routerLinkActive="active" class="nav-item">
-          <span class="nav-icon">📅</span>
-          <span class="nav-label">PLAN</span>
-        </a>
-        <a routerLink="log" routerLinkActive="active" class="nav-item">
-          <span class="nav-icon">📋</span>
-          <span class="nav-label">LOG</span>
-        </a>
-        <a routerLink="progress" routerLinkActive="active" class="nav-item">
-          <span class="nav-icon">📈</span>
-          <span class="nav-label">PROGRESS</span>
-        </a>
-        <a routerLink="leaderboard" routerLinkActive="active" class="nav-item">
-          <span class="nav-icon">🏆</span>
-          <span class="nav-label">BOARD</span>
-        </a>
-        <a routerLink="profile" routerLinkActive="active" class="nav-item">
-          <span class="nav-icon">👤</span>
-          <span class="nav-label">PROFILE</span>
-        </a>
-      </nav>
+<div
+  class="min-h-screen pb-24"
+  style="
+    background: #0a0a0a;
+    color: #f0f0f0;
+    font-family: &quot;DM Sans&quot;, sans-serif;
+  "
+>
+  <div class="header-card">
+    <div class="header-top">
+      <div class="header-day">DAY {{ dayNumber() }} / 100</div>
+      <div class="header-challenge">100 DAY CHALLENGE</div>
     </div>
-  
+    <div class="header-bottom">
+      <div class="header-name">HEY, {{ userName() }} 👋</div>
+      <button class="header-signout" (click)="signOut()">SIGN OUT</button>
+    </div>
+  </div>
+
+  <!-- DROPDOWN MENU -->
+  @if (menuOpen()) {
+    <div class="dropdown-menu">
+      <div class="dropdown-email">{{ userEmail() }}</div>
+      <button
+        class="dropdown-item"
+        routerLink="/dashboard/profile"
+        (click)="menuOpen.set(false)"
+      >
+        ⚙️ Profile & Settings
+      </button>
+      <button class="dropdown-item" (click)="signOut()">🚪 Sign Out</button>
+    </div>
+    <div class="dropdown-backdrop" (click)="menuOpen.set(false)"></div>
+  }
+
+  <!-- ROUTER OUTLET -->
+  <router-outlet />
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <a routerLink="today" routerLinkActive="active" class="nav-item">
+      <span class="nav-icon">✓</span>
+      <span class="nav-label">TODAY</span>
+    </a>
+    <a routerLink="schedule" routerLinkActive="active" class="nav-item">
+      <span class="nav-icon">📅</span>
+      <span class="nav-label">PLAN</span>
+    </a>
+    <a routerLink="log" routerLinkActive="active" class="nav-item">
+      <span class="nav-icon">📋</span>
+      <span class="nav-label">LOG</span>
+    </a>
+    <a routerLink="profile" routerLinkActive="active" class="nav-item">
+      <span class="nav-icon">👤</span>
+      <span class="nav-label">PROFILE</span>
+    </a>
+  </nav>
+</div>

@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable, map } from "rxjs";
+import { environment } from "../../../environments/environment";
 
 export interface FoodItem {
   fdcId: number;
@@ -12,27 +12,30 @@ export interface FoodItem {
   fat: number;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class NutritionService {
-
-  private base = 'https://api.nal.usda.gov/fdc/v1';
+  private base = "https://api.nal.usda.gov/fdc/v1";
   private apiKey = environment.usdaApiKey;
 
   constructor(private http: HttpClient) {}
 
   searchFood(query: string): Observable<FoodItem[]> {
-    return this.http.get<any>(
-      `${this.base}/foods/search?query=${encodeURIComponent(query)}&api_key=${this.apiKey}&pageSize=10&dataType=Foundation,SR Legacy`
-    ).pipe(
-      map(res => res.foods.map((f: any) => ({
-        fdcId: f.fdcId,
-        description: f.description,
-        protein: this.getNutrient(f.foodNutrients, 1003),
-        calories: this.getNutrient(f.foodNutrients, 1008),
-        carbs: this.getNutrient(f.foodNutrients, 1005),
-        fat: this.getNutrient(f.foodNutrients, 1004)
-      })))
-    );
+    return this.http
+      .get<any>(
+        `${this.base}/foods/search?query=${encodeURIComponent(query)}&api_key=${this.apiKey}&pageSize=10&dataType=Foundation,SR Legacy`,
+      )
+      .pipe(
+        map((res) =>
+          res.foods.map((f: any) => ({
+            fdcId: f.fdcId,
+            description: f.description,
+            protein: this.getNutrient(f.foodNutrients, 1003),
+            calories: this.getNutrient(f.foodNutrients, 1008),
+            carbs: this.getNutrient(f.foodNutrients, 1005),
+            fat: this.getNutrient(f.foodNutrients, 1004),
+          })),
+        ),
+      );
   }
 
   // Extract nutrient value by nutrientId
@@ -49,7 +52,7 @@ export class NutritionService {
       protein: Math.round(food.protein * ratio * 10) / 10,
       calories: Math.round(food.calories * ratio),
       carbs: Math.round(food.carbs * ratio * 10) / 10,
-      fat: Math.round(food.fat * ratio * 10) / 10
+      fat: Math.round(food.fat * ratio * 10) / 10,
     };
   }
 }

@@ -12,17 +12,20 @@
       [(ngModel)]="searchQuery"
       placeholder="Search exercises..."
       (keyup.enter)="search()"
-      class="search-input">
+      class="search-input"
+    />
     <button class="search-btn" (click)="search()">GO</button>
   </div>
 
   <!-- Body Part Filter -->
   <div class="bodypart-scroll">
     @for (part of bodyParts; track part) {
-      <button class="part-btn"
+      <button
+        class="part-btn"
         [class.active]="selectedBodyPart() === part"
-        (click)="filterByBodyPart(part)">
-        {{part | titlecase}}
+        (click)="filterByBodyPart(part)"
+      >
+        {{ part | titlecase }}
       </button>
     }
   </div>
@@ -34,10 +37,14 @@
 
   @for (ex of results(); track ex.id) {
     <div class="result-card">
-      <img [src]="exerciseService.getImageUrl(ex.id)" [alt]="ex.name" class="result-gif">
+      <img
+        [src]="exerciseService.getImageUrl(ex.id)"
+        [alt]="ex.name"
+        class="result-gif"
+      />
       <div class="result-info">
-        <div class="result-name">{{ex.name | titlecase}}</div>
-        <div class="result-meta">{{ex.target}} · {{ex.equipment}}</div>
+        <div class="result-name">{{ ex.name | titlecase }}</div>
+        <div class="result-meta">{{ ex.target }} · {{ ex.equipment }}</div>
       </div>
       <div class="result-actions">
         <button class="btn-how" (click)="viewDetail(ex)">HOW?</button>
@@ -52,6 +59,7 @@
   <app-exercise-detail
     [exercise]="selectedExercise()!"
     (close)="selectedExercise.set(null)"
-    (selectAlternative)="pick($event)">
+    (selectAlternative)="pick($event)"
+  >
   </app-exercise-detail>
 }

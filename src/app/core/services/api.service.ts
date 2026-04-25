@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { AuthService } from './auth.service';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { environment } from "../../../environments/environment";
+import { AuthService } from "./auth.service";
 
 export interface OnboardingAnswers {
   age: number;
@@ -82,20 +82,14 @@ export interface MeasurementLog {
   armR?: number;
 }
 
-export interface LeaderboardEntry {
-  userId: string;
-  name: string;
-  dayNumber: number;
-  streak: number;
-  totalScore: number;
-  isPublic: boolean;
-}
-
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class ApiService {
   private base = environment.apiUrl;
 
-  constructor(private http: HttpClient, private auth: AuthService) { }
+  constructor(
+    private http: HttpClient,
+    private auth: AuthService,
+  ) {}
 
   // ── PLAN ──
   generatePlan(answers: OnboardingAnswers): Observable<FitPlan> {
@@ -103,7 +97,7 @@ export class ApiService {
   }
 
   getPlan(): Observable<FitPlan> {
-    const userId = this.auth.currentUser()?.userId || '';
+    const userId = this.auth.currentUser()?.userId || "";
     return this.http.get<FitPlan>(`${this.base}/plans/${userId}`);
   }
 
@@ -113,32 +107,32 @@ export class ApiService {
   }
 
   getLogs(): Observable<DailyLog[]> {
-    const userId = this.auth.currentUser()?.userId || '';
+    const userId = this.auth.currentUser()?.userId || "";
     return this.http.get<DailyLog[]>(`${this.base}/logs/${userId}`);
   }
 
   getLogByDate(date: string): Observable<DailyLog> {
-    const userId = this.auth.currentUser()?.userId || '';
+    const userId = this.auth.currentUser()?.userId || "";
     return this.http.get<DailyLog>(`${this.base}/logs/${userId}/${date}`);
   }
 
   updateLog(date: string, log: any): Observable<any> {
-    const userId = this.auth.currentUser()?.userId || '';
+    const userId = this.auth.currentUser()?.userId || "";
     return this.http.put(`${this.base}/logs/update/${userId}/${date}`, log);
   }
 
   createUser(data: any): Observable<any> {
-    const userId = this.auth.currentUser()?.userId || '';
+    const userId = this.auth.currentUser()?.userId || "";
     return this.http.post(`${this.base}/users/create`, { ...data, userId });
   }
 
   getProfile(): Observable<any> {
-    const userId = this.auth.currentUser()?.userId || '';
+    const userId = this.auth.currentUser()?.userId || "";
     return this.http.get(`${this.base}/users/${userId}`);
   }
 
   updateProfile(data: any): Observable<any> {
-    const userId = this.auth.currentUser()?.userId || '';
+    const userId = this.auth.currentUser()?.userId || "";
     return this.http.put(`${this.base}/users/update/${userId}`, data);
   }
 
@@ -147,32 +141,58 @@ export class ApiService {
   }
 
   updateMeasurements(userId: string, measurements: string): Observable<any> {
-    return this.http.put(`${this.base}/measurements/${userId}`, { measurements });
-  }
-
-  updatePrivacy(isPublic: boolean): Observable<any> {
-    const userId = this.auth.currentUser()?.userId || '';
-    return this.http.put(`${this.base}/users/${userId}/privacy`, { isPublic });
+    return this.http.put(`${this.base}/measurements/${userId}`, {
+      measurements,
+    });
   }
 
   checkUsername(username: string): Observable<any> {
     return this.http.get(`${this.base}/users/check/${username}`);
   }
 
-  // ── LEADERBOARD ──
-  getLeaderboard(): Observable<LeaderboardEntry[]> {
-    return this.http.get<LeaderboardEntry[]>(`${this.base}/leaderboard`);
+  getMealTemplates(): Observable<any[]> {
+    const userId = this.auth.currentUser()?.userId || "";
+    return this.http.get<any[]>(`${this.base}/meals-templates/${userId}`);
+  }
+
+  saveMealTemplate(template: any): Observable<any> {
+    const userId = this.auth.currentUser()?.userId || "";
+    return this.http.post(`${this.base}/meals-templates/${userId}`, {
+      mealTemplates: JSON.stringify(template),
+    });
+  }
+
+  saveMealTemplates(templates: any[]): Observable<any> {
+    const userId = this.auth.currentUser()?.userId || "";
+    return this.http.post(`${this.base}/meals-templates/${userId}`, {
+      mealTemplates: JSON.stringify(templates),
+    });
+  }
+
+  calculateMealMacros(description: string): Observable<any> {
+    return this.http.post(`${this.base}/nutrition/calculate`, { description });
+  }
+
+  updateMeasurementHistory(
+    userId: string,
+    measurements: string,
+    history: string,
+  ): Observable<any> {
+    return this.http.put(`${this.base}/measurements/${userId}`, {
+      measurements,
+      measurementHistory: history,
+    });
   }
 
   private getCurrentUserId(): string {
     // Extract userId from JWT token in localStorage
     const keys = Object.keys(localStorage);
-    const tokenKey = keys.find(k => k.includes('idToken'));
+    const tokenKey = keys.find((k) => k.includes("idToken"));
     if (tokenKey) {
-      const token = localStorage.getItem(tokenKey) || '';
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.sub || '';
+      const token = localStorage.getItem(tokenKey) || "";
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      return payload.sub || "";
     }
-    return '';
+    return "";
   }
 }

@@ -1,63 +1,387 @@
-.loading-state { text-align:center; color:#555; padding:40px; font-family:'DM Mono',monospace; font-size:13px; }
+.loading-state {
+  text-align: center;
+  color: #555;
+  padding: 40px;
+  font-family: "DM Mono", monospace;
+  font-size: 13px;
+}
 
-.profile-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; padding:16px; background:#111; border:1px solid #2a2a2a; border-radius:12px; }
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+}
 
-.avatar { width:52px; height:52px; background:#e8ff47; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Bebas Neue',sans-serif; font-size:26px; color:#000; flex-shrink:0; }
+.avatar {
+  width: 52px;
+  height: 52px;
+  background: #e8ff47;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 26px;
+  color: #000;
+  flex-shrink: 0;
+}
 
-.profile-name { font-family:'Bebas Neue',sans-serif; font-size:20px; color:#f0f0f0; }
-.profile-username { font-size:12px; color:#555; font-family:'DM Mono',monospace; margin-bottom:6px; }
-.profile-stats { display:flex; gap:6px; }
-.stat-pill { font-size:10px; padding:3px 8px; background:#e8ff4722; color:#e8ff47; border-radius:20px; font-family:'DM Mono',monospace; }
+.profile-name {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 20px;
+  color: #f0f0f0;
+}
+.profile-username {
+  font-size: 12px;
+  color: #555;
+  font-family: "DM Mono", monospace;
+  margin-bottom: 6px;
+}
+.profile-stats {
+  display: flex;
+  gap: 6px;
+}
+.stat-pill {
+  font-size: 10px;
+  padding: 3px 8px;
+  background: #e8ff4722;
+  color: #e8ff47;
+  border-radius: 20px;
+  font-family: "DM Mono", monospace;
+}
 
-.section-tabs { display:flex; gap:2px; margin-bottom:16px; }
-.section-tabs button { flex:1; padding:8px; background:#111; border:1px solid #2a2a2a; color:#555; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:1px; cursor:pointer; border-radius:4px; transition:all 0.2s; }
-.section-tabs button.active { background:#e8ff47; color:#000; border-color:#e8ff47; }
+.section-tabs {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 16px;
+}
+.section-tabs button {
+  flex: 1;
+  padding: 8px;
+  background: #111;
+  border: 1px solid #2a2a2a;
+  color: #555;
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+.section-tabs button.active {
+  background: #e8ff47;
+  color: #000;
+  border-color: #e8ff47;
+}
 
-.section-card { background:#111; border:1px solid #2a2a2a; border-radius:8px; padding:16px; display:flex; flex-direction:column; gap:12px; }
-.card-title { font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:2px; color:#e8ff47; }
+.section-card {
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.card-title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+  color: #e8ff47;
+}
 
-.field-group { display:flex; flex-direction:column; gap:5px; }
-.field-group label { font-size:10px; color:#555; text-transform:uppercase; letter-spacing:2px; font-family:'DM Mono',monospace; }
-.field-group input { background:#1a1a1a; border:1px solid #2a2a2a; border-radius:4px; color:#f0f0f0; font-family:'DM Sans',sans-serif; font-size:14px; padding:8px 10px; outline:none; }
-.field-group input:focus { border-color:#e8ff47; }
-.disabled { opacity:0.4; cursor:not-allowed; }
-.hint { font-size:10px; color:#444; font-family:'DM Mono',monospace; }
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.field-group label {
+  font-size: 10px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-family: "DM Mono", monospace;
+}
+.field-group input {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 4px;
+  color: #f0f0f0;
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  padding: 8px 10px;
+  outline: none;
+}
+.field-group input:focus {
+  border-color: #e8ff47;
+}
+.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.hint {
+  font-size: 10px;
+  color: #444;
+  font-family: "DM Mono", monospace;
+}
 
-.btn-primary { width:100%; padding:12px; background:#e8ff47; color:#000; border:none; border-radius:4px; font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:2px; cursor:pointer; }
-.btn-primary:disabled { opacity:0.4; cursor:not-allowed; }
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background: #e8ff47;
+  color: #000;
+  border: none;
+  border-radius: 4px;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+  cursor: pointer;
+}
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
 
-.success-msg { background:#4ade8022; border:1px solid #4ade80; border-radius:4px; padding:8px 12px; font-size:12px; color:#4ade80; font-family:'DM Mono',monospace; }
+.success-msg {
+  background: #4ade8022;
+  border: 1px solid #4ade80;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #4ade80;
+  font-family: "DM Mono", monospace;
+}
 
-/* Plan cards */
-.plan-meta { font-size:11px; color:#444; font-family:'DM Mono',monospace; margin-bottom:12px; text-align:center; }
+.plan-meta {
+  font-size: 11px;
+  color: #444;
+  font-family: "DM Mono", monospace;
+  margin-bottom: 12px;
+  text-align: center;
+}
+.plan-card {
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 10px;
+  border: 1px solid #2a2a2a;
+  background: #111;
+}
+.plan-label {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 13px;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+.plan-text {
+  font-size: 13px;
+  color: #ccc;
+  line-height: 1.6;
+  font-family: "DM Sans", sans-serif;
+}
+.strategy-card .plan-label {
+  color: #e8ff47;
+}
+.training-card .plan-label {
+  color: #47c8ff;
+}
+.nutrition-card .plan-label {
+  color: #4ade80;
+}
+.supplements-card .plan-label {
+  color: #ff6b35;
+}
+.recovery-card .plan-label {
+  color: #a78bfa;
+}
 
-.plan-card { border-radius:8px; padding:14px; margin-bottom:10px; border:1px solid #2a2a2a; background:#111; }
-.plan-label { font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:2px; margin-bottom:8px; }
-.plan-text { font-size:13px; color:#ccc; line-height:1.6; font-family:'DM Sans',sans-serif; }
+.btn-regenerate {
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  border: 1px solid #2a2a2a;
+  border-radius: 4px;
+  color: #555;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 15px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+.btn-regenerate:hover {
+  border-color: #e8ff47;
+  color: #e8ff47;
+}
 
-.strategy-card .plan-label { color:#e8ff47; }
-.training-card .plan-label { color:#47c8ff; }
-.nutrition-card .plan-label { color:#4ade80; }
-.supplements-card .plan-label { color:#ff6b35; }
-.recovery-card .plan-label { color:#a78bfa; }
+.training-day {
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #1a1a1a;
+}
+.training-day:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+.training-day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.training-day-name {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 14px;
+  color: #47c8ff;
+  letter-spacing: 1px;
+}
+.training-session {
+  font-size: 11px;
+  color: #555;
+  font-family: "DM Mono", monospace;
+}
+.training-ex {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  padding: 3px 0;
+  color: #ccc;
+}
+.ex-name {
+  font-family: "DM Sans", sans-serif;
+}
+.ex-detail {
+  font-family: "DM Mono", monospace;
+  color: #e8ff47;
+  font-size: 11px;
+}
 
-.btn-regenerate { width:100%; padding:12px; background:transparent; border:1px solid #2a2a2a; border-radius:4px; color:#555; font-family:'Bebas Neue',sans-serif; font-size:15px; letter-spacing:2px; cursor:pointer; transition:all 0.2s; margin-top:8px; }
-.btn-regenerate:hover { border-color:#e8ff47; color:#e8ff47; }
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #555;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Timeline */
+.timeline-card {
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.timeline-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.timeline-label {
+  font-size: 10px;
+  color: #555;
+  font-family: "DM Mono", monospace;
+  letter-spacing: 2px;
+}
+.timeline-pct {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 20px;
+  color: #e8ff47;
+}
+.timeline-bar {
+  height: 6px;
+  background: #1a1a1a;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.timeline-fill {
+  height: 100%;
+  background: #e8ff47;
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+.timeline-bottom {
+  display: flex;
+  justify-content: space-between;
+}
+.timeline-sub {
+  font-size: 11px;
+  color: #444;
+  font-family: "DM Mono", monospace;
+}
 
 /* Measurements */
-.measurements-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.measure-card { background:#111; border:1px solid #2a2a2a; border-radius:8px; padding:14px; text-align:center; }
-.measure-val { font-family:'Bebas Neue',sans-serif; font-size:28px; color:#e8ff47; }
-.measure-label { font-size:10px; color:#555; font-family:'DM Mono',monospace; margin-top:4px; }
+.measure-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.measure-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.measure-field label {
+  font-size: 10px;
+  color: #555;
+  font-family: "DM Mono", monospace;
+  letter-spacing: 1px;
+}
+.measure-field input {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 4px;
+  color: #f0f0f0;
+  font-family: "DM Mono", monospace;
+  font-size: 16px;
+  padding: 8px 10px;
+  outline: none;
+  text-align: center;
+}
+.measure-field input:focus {
+  border-color: #e8ff47;
+}
 
-.empty-state { text-align:center; padding:40px; color:#555; font-size:13px; display:flex; flex-direction:column; align-items:center; gap:12px; }
+/* History */
+.history-title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+  color: #555;
+  margin: 16px 0 10px;
+}
+.history-entry {
+  background: #111;
+  border: 1px solid #1a1a1a;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 6px;
+}
+.history-date {
+  font-size: 11px;
+  color: #555;
+  font-family: "DM Mono", monospace;
+  margin-bottom: 6px;
+}
+.history-vals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 12px;
+  color: #888;
+  font-family: "DM Mono", monospace;
+}
 
-.training-day { margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid #1a1a1a; }
-.training-day:last-child { border-bottom:none; margin-bottom:0; }
-.training-day-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
-.training-day-name { font-family:'Bebas Neue',sans-serif; font-size:14px; color:#47c8ff; letter-spacing:1px; }
-.training-session { font-size:11px; color:#555; font-family:'DM Mono',monospace; }
-.training-ex { display:flex; justify-content:space-between; font-size:12px; padding:3px 0; color:#ccc; }
-.ex-name { font-family:'DM Sans',sans-serif; }
-.ex-detail { font-family:'DM Mono',monospace; color:#e8ff47; font-size:11px; }
-  
+.profile-info {
+  flex: 1;
+  min-width: 0;
+}

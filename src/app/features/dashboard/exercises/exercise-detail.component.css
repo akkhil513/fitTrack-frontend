@@ -1,14 +1,18 @@
 .backdrop {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.7);
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
   z-index: 200;
   animation: fadeIn 0.2s ease;
 }
 
 .sheet {
-  position: fixed; bottom: 0; left: 50%;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
   transform: translateX(-50%);
-  width: 100%; max-width: 480px;
+  width: 100%;
+  max-width: 480px;
   background: #111;
   border-radius: 16px 16px 0 0;
   border-top: 1px solid #2a2a2a;
@@ -20,90 +24,196 @@
 }
 
 .handle {
-  width: 40px; height: 4px;
-  background: #2a2a2a; border-radius: 2px;
+  width: 40px;
+  height: 4px;
+  background: #2a2a2a;
+  border-radius: 2px;
   margin: 0 auto 16px;
 }
 
 .close-btn {
-  position: absolute; top: 16px; right: 16px;
-  background: #1a1a1a; border: 1px solid #2a2a2a;
-  color: #555; width: 28px; height: 28px;
-  border-radius: 50%; cursor: pointer; font-size: 12px;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  color: #555;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 12px;
 }
 
 .ex-name {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 22px; letter-spacing: 1px;
-  color: #f0f0f0; margin-bottom: 8px;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 22px;
+  letter-spacing: 1px;
+  color: #f0f0f0;
+  margin-bottom: 8px;
 }
 
-.ex-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
-.tag { font-size: 10px; padding: 3px 8px; border-radius: 2px; font-family: 'DM Mono', monospace; }
-.target { background: #e8ff4722; color: #e8ff47; }
-.equipment { background: #47c8ff22; color: #47c8ff; }
-.bodypart { background: #ff6b3522; color: #ff6b35; }
+.ex-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.tag {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 2px;
+  font-family: "DM Mono", monospace;
+}
+.target {
+  background: #e8ff4722;
+  color: #e8ff47;
+}
+.equipment {
+  background: #47c8ff22;
+  color: #47c8ff;
+}
+.bodypart {
+  background: #ff6b3522;
+  color: #ff6b35;
+}
 
 .gif-container {
-  width: 100%; background: #1a1a1a;
-  border-radius: 8px; overflow: hidden;
-  margin-bottom: 20px; text-align: center;
+  width: 100%;
+  background: #1a1a1a;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 .exercise-gif {
-  width: 100%; max-height: 250px;
+  width: 100%;
+  max-height: 250px;
   object-fit: contain;
 }
 
 .section-label {
-  font-size: 10px; color: #555;
-  letter-spacing: 3px; font-family: 'DM Mono', monospace;
-  margin-bottom: 12px; text-transform: uppercase;
+  font-size: 10px;
+  color: #555;
+  letter-spacing: 3px;
+  font-family: "DM Mono", monospace;
+  margin-bottom: 12px;
+  text-transform: uppercase;
 }
 
-.instructions { margin-bottom: 20px; }
+.instructions {
+  margin-bottom: 20px;
+}
 
 .step {
-  display: flex; gap: 12px;
-  padding: 10px 0; border-bottom: 1px solid #1a1a1a;
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #1a1a1a;
 }
 
 .step-num {
-  width: 22px; height: 22px; border-radius: 50%;
-  background: #e8ff47; color: #000;
-  font-family: 'Bebas Neue', sans-serif; font-size: 13px;
-  display: flex; align-items: center; justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #e8ff47;
+  color: #000;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
 }
 
-.step-text { font-size: 13px; color: #ccc; line-height: 1.5; }
+.step-text {
+  font-size: 13px;
+  color: #ccc;
+  line-height: 1.5;
+}
 
 .btn-alt {
-  width: 100%; padding: 12px;
-  background: transparent; border: 1px solid #2a2a2a;
-  border-radius: 6px; color: #888;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 15px; letter-spacing: 2px;
-  cursor: pointer; transition: all 0.2s;
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  border: 1px solid #2a2a2a;
+  border-radius: 6px;
+  color: #888;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 15px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.2s;
   margin-bottom: 16px;
 }
-.btn-alt:hover { border-color: #e8ff47; color: #e8ff47; }
+.btn-alt:hover {
+  border-color: #e8ff47;
+  color: #e8ff47;
+}
 
-.loading { text-align: center; color: #555; font-size: 13px; padding: 20px; }
+.loading {
+  text-align: center;
+  color: #555;
+  font-size: 13px;
+  padding: 20px;
+}
 
 .alt-card {
-  display: flex; align-items: center; gap: 12px;
-  padding: 10px; background: #1a1a1a;
-  border: 1px solid #2a2a2a; border-radius: 8px;
-  margin-bottom: 8px; cursor: pointer; transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
 }
-.alt-card:hover { border-color: #e8ff47; }
+.alt-card:hover {
+  border-color: #e8ff47;
+}
 
-.alt-gif { width: 60px; height: 60px; border-radius: 6px; object-fit: cover; }
-.alt-info { flex: 1; }
-.alt-name { font-size: 13px; font-weight: 500; color: #f0f0f0; margin-bottom: 3px; }
-.alt-target { font-size: 11px; color: #555; font-family: 'DM Mono', monospace; }
-.alt-select { font-family: 'Bebas Neue', sans-serif; font-size: 13px; color: #e8ff47; }
+.alt-gif {
+  width: 60px;
+  height: 60px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+.alt-info {
+  flex: 1;
+}
+.alt-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #f0f0f0;
+  margin-bottom: 3px;
+}
+.alt-target {
+  font-size: 11px;
+  color: #555;
+  font-family: "DM Mono", monospace;
+}
+.alt-select {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 13px;
+  color: #e8ff47;
+}
 
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideUp { from { transform: translateX(-50%) translateY(100%); } to { transform: translateX(-50%) translateY(0); } }
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes slideUp {
+  from {
+    transform: translateX(-50%) translateY(100%);
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+  }
+}

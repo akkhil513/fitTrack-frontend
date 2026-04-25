@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build --configuration production",
     "deploy": "ng build --configuration production && aws s3 sync dist/fittrack-frontend/browser/ s3://$S3_BUCKET --delete && aws cloudfront create-invalidation --distribution-id $CF_DIST_ID --paths '/*'",
-    "test": "ng test"
+    "test": "ng test",
+    "format": "prettier --write \"src/**/*.{ts,html,css,json,md}\""
   },
   "dependencies": {
     "@angular/animations": "^17.0.0",
@@ -28,6 +29,7 @@
     "@angular/compiler-cli": "^17.0.0",
     "@types/node": "^20.0.0",
     "typescript": "^5.2.0",
+    "prettier": "^3.8.3",
     "tailwindcss": "^3.4.0",
     "autoprefixer": "^10.4.0",
     "postcss": "^8.4.0"

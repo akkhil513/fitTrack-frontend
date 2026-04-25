@@ -1,38 +1,67 @@
-import { Routes } from '@angular/router';
-import { authGuard } from './core/guards/auth.guard';
-import { onboardingGuard } from './core/guards/onboarding.guard';
+import { Routes } from "@angular/router";
+import { authGuard } from "./core/guards/auth.guard";
+import { onboardingGuard } from "./core/guards/onboarding.guard";
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: "", redirectTo: "/dashboard", pathMatch: "full" },
 
   // Auth routes
   {
-    path: 'auth',
-    loadChildren: () => import('./features/auth/auth.routes').then(m => m.AUTH_ROUTES)
+    path: "auth",
+    loadChildren: () =>
+      import("./features/auth/auth.routes").then((m) => m.AUTH_ROUTES),
   },
 
   // Onboarding — only if no plan exists
   {
-    path: 'onboarding',
+    path: "onboarding",
     canActivate: [authGuard],
-    loadComponent: () => import('./features/onboarding/onboarding.component').then(m => m.OnboardingComponent)
+    loadComponent: () =>
+      import("./features/onboarding/onboarding.component").then(
+        (m) => m.OnboardingComponent,
+      ),
   },
 
   // Main app — protected
   {
-    path: 'dashboard',
+    path: "dashboard",
     canActivate: [authGuard, onboardingGuard],
-    loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
+    loadComponent: () =>
+      import("./features/dashboard/dashboard.component").then(
+        (m) => m.DashboardComponent,
+      ),
     children: [
-      { path: '', redirectTo: 'today', pathMatch: 'full' },
-      { path: 'today', loadComponent: () => import('./features/dashboard/checklist/checklist.component').then(m => m.ChecklistComponent) },
-      { path: 'schedule', loadComponent: () => import('./features/dashboard/schedule/schedule.component').then(m => m.ScheduleComponent) },
-      { path: 'log', loadComponent: () => import('./features/dashboard/log/log.component').then(m => m.LogComponent) },
-      { path: 'progress', loadComponent: () => import('./features/dashboard/progress/progress.component').then(m => m.ProgressComponent) },
-      { path: 'leaderboard', loadComponent: () => import('./features/dashboard/leaderboard/leaderboard.component').then(m => m.LeaderboardComponent) },
-      { path: 'profile', loadComponent: () => import('./features/profile/profile.component').then(m => m.ProfileComponent) },
-    ]
+      { path: "", redirectTo: "today", pathMatch: "full" },
+      {
+        path: "today",
+        loadComponent: () =>
+          import("./features/dashboard/checklist/checklist.component").then(
+            (m) => m.ChecklistComponent,
+          ),
+      },
+      {
+        path: "schedule",
+        loadComponent: () =>
+          import("./features/dashboard/schedule/schedule.component").then(
+            (m) => m.ScheduleComponent,
+          ),
+      },
+      {
+        path: "log",
+        loadComponent: () =>
+          import("./features/dashboard/log/log.component").then(
+            (m) => m.LogComponent,
+          ),
+      },
+      {
+        path: "profile",
+        loadComponent: () =>
+          import("./features/profile/profile.component").then(
+            (m) => m.ProfileComponent,
+          ),
+      },
+    ],
   },
 
-  { path: '**', redirectTo: '/dashboard' }
+  { path: "**", redirectTo: "/dashboard" },
 ];

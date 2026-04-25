@@ -8,8 +8,12 @@
 
   <!-- Search -->
   <div class="search-row">
-    <input [(ngModel)]="searchQuery" placeholder="e.g. chicken breast, rice, eggs..."
-      (keyup.enter)="search()" class="search-input">
+    <input
+      [(ngModel)]="searchQuery"
+      placeholder="e.g. chicken breast, rice, eggs..."
+      (keyup.enter)="search()"
+      class="search-input"
+    />
     <button class="search-btn" (click)="search()">GO</button>
   </div>
 
@@ -20,10 +24,10 @@
   <!-- Selected food detail -->
   @if (selectedFood()) {
     <div class="selected-card">
-      <div class="selected-name">{{selectedFood()!.description}}</div>
+      <div class="selected-name">{{ selectedFood()!.description }}</div>
       <div class="grams-row">
         <label>Amount</label>
-        <input type="number" [(ngModel)]="grams" min="1" class="grams-input">
+        <input type="number" [(ngModel)]="grams" min="1" class="grams-input" />
         <span class="grams-label">g</span>
       </div>
 
@@ -33,7 +37,7 @@
         <div class="presets-row">
           @for (preset of getPresets(); track preset.label) {
             <button class="preset-btn" (click)="grams = preset.grams">
-              {{preset.label}}
+              {{ preset.label }}
             </button>
           }
         </div>
@@ -41,25 +45,27 @@
       @if (calculated()) {
         <div class="nutrition-grid">
           <div class="nut-card protein">
-            <div class="nut-val">{{calculated()!.protein}}g</div>
+            <div class="nut-val">{{ calculated()!.protein }}g</div>
             <div class="nut-label">Protein</div>
           </div>
           <div class="nut-card calories">
-            <div class="nut-val">{{calculated()!.calories}}</div>
+            <div class="nut-val">{{ calculated()!.calories }}</div>
             <div class="nut-label">Calories</div>
           </div>
           <div class="nut-card carbs">
-            <div class="nut-val">{{calculated()!.carbs}}g</div>
+            <div class="nut-val">{{ calculated()!.carbs }}g</div>
             <div class="nut-label">Carbs</div>
           </div>
           <div class="nut-card fat">
-            <div class="nut-val">{{calculated()!.fat}}g</div>
+            <div class="nut-val">{{ calculated()!.fat }}g</div>
             <div class="nut-label">Fat</div>
           </div>
         </div>
       }
       <button class="btn-add" (click)="addToLog()">+ ADD TO LOG</button>
-      <button class="btn-back" (click)="selectedFood.set(null)">← Back to results</button>
+      <button class="btn-back" (click)="selectedFood.set(null)">
+        ← Back to results
+      </button>
     </div>
   }
 
@@ -68,9 +74,9 @@
     @for (food of results(); track food.fdcId) {
       <div class="result-card" (click)="selectFood(food)">
         <div class="result-info">
-          <div class="result-name">{{food.description}}</div>
+          <div class="result-name">{{ food.description }}</div>
           <div class="result-macros">
-            {{food.protein}}g protein · {{food.calories}} kcal · per 100g
+            {{ food.protein }}g protein · {{ food.calories }} kcal · per 100g
           </div>
         </div>
         <div class="result-arrow">→</div>

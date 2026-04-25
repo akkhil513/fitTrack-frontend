@@ -1,289 +1,688 @@
-<div class="px-5 pb-6" style="padding-bottom: 120px;">
-
-      <!-- TABS -->
-      <div class="log-tabs">
-        <button [class.active]="activeTab() === 'workout'" (click)="activeTab.set('workout')">WORKOUT</button>
-        <button [class.active]="activeTab() === 'nutrition'" (click)="activeTab.set('nutrition')">NUTRITION</button>
-        <button [class.active]="activeTab() === 'history'" (click)="activeTab.set('history')">HISTORY</button>
-      </div>
-
-      <!-- WORKOUT LOG -->
-      @if (activeTab() === 'workout') {
-        <div class="log-card">
-          <div class="log-card-title">LOG WORKOUT</div>
-          <div class="field-group">
-            <label>Log Date</label>
-            <input type="date" [(ngModel)]="logDate" (change)="onDateChange()" [max]="today">
-          </div>
-          <div class="field-group">
-            <label>Session Type</label>
-            <select [(ngModel)]="workout.session">
-              <option>Push A — Chest/Shoulders/Triceps</option>
-              <option>Pull A — Back/Biceps</option>
-              <option>Legs</option>
-              <option>Push B — Shoulders/Upper Chest</option>
-              <option>Pull B — Back/Traps/Biceps</option>
-              <option>Active Recovery</option>
-            </select>
-          </div>
-
-          <div class="ex-header">
-            <span>EXERCISE</span>
-          </div>
-
-          @for (ex of exercises(); track $index) {
-            <div class="exercise-block">
-
-              <!-- Exercise name row -->
-              <div class="ex-name-row">
-                @if (customExercises().has($index)) {
-                  <input class="ex-name-select" [(ngModel)]="ex.name" readonly>
-                  <button class="btn-how-sm" (click)="removeCustomExercise($index)">↩</button>
-                } @else {
-                  <select class="ex-name-select" [(ngModel)]="ex.name" (change)="onExerciseChange(ex, $index)">
-                    <option value="">Select exercise</option>
-                    @for (name of todayExerciseList(); track name) {
-                      <option [value]="name">{{name}}</option>
-                    }
-                    <option value="other">+ Other (search)</option>
-                  </select>
-                  <button class="btn-how-sm" (click)="searchAndShowDetail(ex.name)" title="How to">?</button>
-                }
-                <button class="btn-remove-ex" (click)="removeExercise($index)">🗑</button>
-              </div>
-
-              <!-- Sets -->
-              <div class="sets-header">
-                <span>SET</span>
-                <span>REPS</span>
-                <span>LBS</span>
-                <span></span>
-              </div>
-
-              @for (set of ex.sets; track $index) {
-                <div class="set-row">
-                  <span class="set-num">{{$index + 1}}</span>
-                  <input [(ngModel)]="set.reps" placeholder="8" type="number" class="set-val">
-                  <input [(ngModel)]="set.weight" placeholder="135" type="number" class="set-val">
-                  <button class="btn-remove-set" (click)="removeSet(exercises().indexOf(ex), $index)">−</button>
-                </div>
-              }
-
-              <button class="btn-add-set" (click)="addSet(exercises().indexOf(ex))">+ ADD SET</button>
-
-            </div>
-          }
-
-          <button class="btn-add" (click)="addRow()">+ ADD EXERCISE</button>
-
-          <div class="field-group">
-            <label>Notes</label>
-            <textarea [(ngModel)]="workout.notes" placeholder="How did the session feel? Any PRs?"></textarea>
-          </div>
-
-          @if (savedMsg()) {
-            <div class="success-msg">{{savedMsg()}}</div>
-          }
-          <button class="btn-primary" (click)="saveWorkout()" [disabled]="saving()">
-            {{saving() ? 'SAVING...' : 'SAVE WORKOUT'}}
-          </button>
-        </div>
-      }
-
-      <!-- NUTRITION LOG -->
-      @if (activeTab() === 'nutrition') {
-        <div class="log-card">
-          <div class="log-card-title">LOG NUTRITION</div>
-
-          <div class="field-group">
-            <label>Log Date</label>
-            <input type="date" [(ngModel)]="logDate" (change)="onDateChange()" [max]="today">
-          </div>
-
-          @if (foodEntries().length > 0) {
-            <div class="ex-header"><span>FOODS ADDED</span></div>
-            @for (entry of foodEntries(); track $index) {
-              <div class="food-entry">
-                <div class="food-entry-info">
-                  <div class="food-entry-name">{{entry.food.description}}</div>
-                  <div class="food-entry-macros">
-                    {{entry.grams}}g · {{entry.calculated.protein}}g protein · {{entry.calculated.calories}} kcal
-                  </div>
-                </div>
-                <button class="btn-remove-food" (click)="removeFoodEntry($index)">✕</button>
-              </div>
-            }
-          }
-
-          <button class="btn-add-food" (click)="showFoodSearch.set(true)">
-            🔍 SEARCH & ADD FOOD
-          </button>
-
-          <div class="nutrition-totals">
-            <div class="total-row">
-              <span>Total Protein</span>
-              <span [class.hit]="nutrition.protein >= 160" [class.miss]="nutrition.protein < 160 && nutrition.protein > 0">
-                {{nutrition.protein}}g / 160g
-              </span>
-            </div>
-            <div class="total-row">
-              <span>Total Calories</span>
-              <span [class.hit]="nutrition.calories >= 2500" [class.miss]="nutrition.calories < 2500 && nutrition.calories > 0">
-                {{nutrition.calories}} / 2600 kcal
-              </span>
-            </div>
-          </div>
-
-          <div class="grid-2">
-            <div class="field-group">
-              <label>Water (litres)</label>
-              <input type="number" [(ngModel)]="nutrition.water" placeholder="4" step="0.5">
-            </div>
-            <div class="field-group">
-              <label>Sleep (hours)</label>
-              <input type="number" [(ngModel)]="nutrition.sleep" placeholder="7.5" step="0.5">
-            </div>
-          </div>
-
-          @if (savedMsg()) {
-            <div class="success-msg">{{savedMsg()}}</div>
-          }
-          <button class="btn-primary" (click)="saveNutrition()" [disabled]="saving()">
-            {{saving() ? 'SAVING...' : 'SAVE NUTRITION'}}
-          </button>
-        </div>
-
-        @if (showFoodSearch()) {
-          <app-food-search
-            (addFood)="onFoodAdded($event)"
-            (close)="showFoodSearch.set(false)">
-          </app-food-search>
-        }
-      }
-
-      <!-- HISTORY -->
-@if (activeTab() === 'history') {
-  <div class="section-title">PAST LOGS</div>
-  
-  <!-- Date picker to load specific date -->
-  <div class="field-group" style="margin-bottom:16px">
-    <label>Select Date to Edit</label>
-    <input type="date" [(ngModel)]="selectedDate" (change)="loadLogByDate()" 
-      [max]="today" style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:4px;color:#f0f0f0;padding:8px 10px;width:100%;outline:none;">
+<div class="px-5 pb-6" style="padding-bottom: 120px">
+  <!-- TABS -->
+  <div class="log-tabs">
+    <button
+      [class.active]="activeTab() === 'workout'"
+      (click)="activeTab.set('workout')"
+    >
+      WORKOUT
+    </button>
+    <button
+      [class.active]="activeTab() === 'nutrition'"
+      (click)="activeTab.set('nutrition')"
+    >
+      NUTRITION
+    </button>
+    <button
+      [class.active]="activeTab() === 'history'"
+      (click)="activeTab.set('history')"
+    >
+      HISTORY
+    </button>
   </div>
 
-  @if (selectedLog()) {
-    <div class="log-card" style="margin-bottom:16px">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <div class="log-card-title">EDITING — {{selectedDate}}</div>
-        <button (click)="selectedLog.set(null)" style="background:transparent;border:none;color:#555;cursor:pointer;font-size:18px">✕</button>
+  <!-- WORKOUT -->
+  @if (activeTab() === "workout") {
+    <div class="session-header">
+      <div class="field-group">
+        <label>Date</label>
+        <input
+          type="date"
+          [(ngModel)]="logDate"
+          (change)="onDateChange()"
+          [max]="today"
+        />
       </div>
       <div class="field-group">
         <label>Session</label>
-        <select [(ngModel)]="selectedLog()!.session">
-          <option>Push A — Chest/Shoulders/Triceps</option>
-          <option>Pull A — Back/Biceps</option>
-          <option>Legs</option>
-          <option>Push B — Shoulders/Upper Chest</option>
-          <option>Pull B — Back/Traps/Biceps</option>
-          <option>Active Recovery</option>
+        <select [(ngModel)]="workout.session" (change)="onSessionChange()">
+          @for (
+            day of [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+              "Sunday",
+            ];
+            track day
+          ) {
+            @if (planSessions[day]) {
+              <option [value]="planSessions[day]">
+                {{ planSessions[day] }}
+              </option>
+            }
+          }
+          <option value="Active Recovery">Active Recovery</option>
+          <option value="Rest Day">Rest Day</option>
         </select>
       </div>
+    </div>
 
-      @if (selectedLogExercises().length > 0) {
-        <div class="ex-header"><span>EXERCISES</span></div>
-        @for (ex of selectedLogExercises(); track $index) {
-          <div class="exercise-block">
-            <div class="ex-name-row">
-              <input class="ex-name-select" [(ngModel)]="ex.name" readonly>
+    @for (ex of exercises(); track ex.name; let i = $index) {
+      <div class="ex-card" [class.ex-expanded]="ex.expanded">
+        <!-- Header -->
+        <div class="ex-card-header" (click)="toggleExpanded(i)">
+          <div class="ex-card-left">
+            <div class="ex-card-name">
+              {{ ex.name || "TAP TO SELECT EXERCISE" }}
             </div>
-            <div class="sets-header">
-              <span>SET</span><span>REPS</span><span>LBS</span><span></span>
+            <div class="ex-card-meta">
+              @if (ex.expanded) {
+                <span
+                  class="ex-weight-toggle"
+                  (click)="$event.stopPropagation(); toggleWeightType(i)"
+                >
+                  {{
+                    ex.weightType === "total"
+                      ? "● TOTAL  ○ PER SIDE"
+                      : "○ TOTAL  ● PER SIDE"
+                  }}
+                </span>
+              } @else {
+                <span [class.ex-sets-done]="getDoneCount(ex) > 0">
+                  {{ getDoneCount(ex) }} / {{ ex.sets.length }} sets done
+                </span>
+              }
             </div>
-            @for (set of ex.sets; track $index) {
-              <div class="set-row">
-                <span class="set-num">{{$index + 1}}</span>
-                <input [(ngModel)]="set.reps" type="number" class="set-val">
-                <input [(ngModel)]="set.weight" type="number" class="set-val">
-                <span></span>
+          </div>
+          <div class="ex-card-right">
+            <div class="ex-action-btns" (click)="$event.stopPropagation()">
+              @if (ex.expanded) {
+                <button
+                  class="btn-tag btn-how"
+                  (click)="searchAndShowDetail(ex.name)"
+                >
+                  HOW
+                </button>
+                <button
+                  class="btn-tag btn-alt"
+                  (click)="activeExerciseIndex.set(i); showPicker.set(true)"
+                >
+                  ALT
+                </button>
+                <button class="btn-tag btn-calc" (click)="toggleCalc(i)">
+                  🧮
+                </button>
+                <button class="btn-remove-ex" (click)="removeExercise(i)">
+                  🗑
+                </button>
+              }
+            </div>
+            <div class="ex-chevron">{{ ex.expanded ? "▲" : "▼" }}</div>
+          </div>
+        </div>
+
+        @if (ex.expanded) {
+          <!-- Exercise select -->
+          <div class="ex-name-section">
+            @if (customExercises().has(i)) {
+              <div style="display: flex; gap: 6px; align-items: center">
+                <input class="ex-name-input" [(ngModel)]="ex.name" readonly />
+                <button class="btn-how-sm" (click)="removeCustomExercise(i)">
+                  ↩
+                </button>
               </div>
+            } @else {
+              <select
+                class="ex-name-input"
+                [(ngModel)]="ex.name"
+                (change)="onExerciseChange(ex, i)"
+              >
+                <option value="">Select exercise</option>
+                @for (name of todayExerciseList(); track name) {
+                  <option [value]="name">{{ name }}</option>
+                }
+                <option value="other">+ Search ExerciseDB</option>
+              </select>
             }
+          </div>
+
+          <!-- Plate calculator -->
+          @if (ex.showCalc) {
+            <div class="calc-panel">
+              <div class="calc-title">🧮 PLATE CALCULATOR</div>
+              <div class="calc-row">
+                <span class="calc-label">Bar weight</span>
+                <input
+                  type="number"
+                  class="calc-input"
+                  [(ngModel)]="ex.barWeight"
+                />
+                <span class="calc-unit">lbs</span>
+              </div>
+              <div class="calc-row">
+                <span class="calc-label">Each side</span>
+                <input
+                  type="number"
+                  class="calc-input"
+                  [(ngModel)]="ex.plateEachSide"
+                />
+                <span class="calc-unit">lbs</span>
+              </div>
+              <div class="calc-total-row">
+                <span class="calc-total-label">TOTAL ON BAR</span>
+                <span class="calc-total-val">{{ getCalcTotal(ex) }} LBS</span>
+              </div>
+              <button class="btn-use-total" (click)="useCalcTotal(i)">
+                USE {{ getCalcTotal(ex) }} LBS →
+              </button>
+            </div>
+          }
+
+          <!-- Sets -->
+          <div class="sets-header">
+            <span>SET</span>
+            <span
+              >LBS
+              {{ ex.weightType === "perSide" ? "(each)" : "(total)" }}</span
+            >
+            <span>REPS</span>
+            <span></span>
+          </div>
+
+          @for (set of ex.sets; track si; let si = $index) {
+            <div class="set-row" [class.set-done-row]="set.done">
+              <span class="set-num">{{ si + 1 }}</span>
+              <input
+                [(ngModel)]="set.weight"
+                placeholder="0"
+                type="number"
+                class="set-val"
+                [class.set-val-done]="set.done"
+              />
+              <input
+                [(ngModel)]="set.reps"
+                placeholder="0"
+                type="number"
+                class="set-val"
+                [class.set-val-done]="set.done"
+              />
+              <button
+                class="btn-done"
+                [class.btn-done-active]="set.done"
+                (click)="toggleDone(i, si)"
+              >
+                {{ set.done ? "✓" : "" }}
+              </button>
+            </div>
+          }
+
+          <button class="btn-add-set" (click)="addSet(i)">+ ADD SET</button>
+        }
+      </div>
+    }
+
+    <button class="btn-add" (click)="addRow()">+ ADD EXERCISE</button>
+
+    <div class="field-group" style="margin-top: 12px">
+      <label>Notes</label>
+      <textarea
+        [(ngModel)]="workout.notes"
+        placeholder="How did it feel? Any PRs?"
+      ></textarea>
+    </div>
+
+    @if (savedMsg()) {
+      <div class="success-msg">{{ savedMsg() }}</div>
+    }
+    <button class="btn-primary" (click)="saveWorkout()" [disabled]="saving()">
+      {{ saving() ? "SAVING..." : "FINISH WORKOUT" }}
+    </button>
+  }
+
+  <!-- NUTRITION -->
+  @if (activeTab() === "nutrition") {
+    <div class="log-card">
+      <div class="log-card-title">LOG NUTRITION</div>
+      <div class="field-group">
+        <label>Log Date</label>
+        <input
+          type="date"
+          [(ngModel)]="logDate"
+          (change)="onDateChange()"
+          [max]="today"
+        />
+      </div>
+
+      <!-- Meal Templates -->
+      @if (mealTemplates().length > 0) {
+        <div class="quick-label">MY MEAL TEMPLATES</div>
+        @for (template of mealTemplates(); track template.id; let i = $index) {
+          <div class="template-card">
+            <div class="template-info">
+              <div class="template-name">{{ template.name }}</div>
+              <div class="template-macros">
+                {{ template.macros.protein }}g protein ·
+                {{ template.macros.calories }} kcal
+              </div>
+            </div>
+            <div class="template-actions">
+              <button
+                class="btn-tag btn-alt"
+                (click)="addTemplateToLog(template)"
+              >
+                + ADD
+              </button>
+              <button class="btn-remove-food" (click)="deleteTemplate(i)">
+                ✕
+              </button>
+            </div>
           </div>
         }
       }
 
+      <!-- Quick Add -->
+      <div class="quick-label">QUICK ADD</div>
+      <div class="quick-chips">
+        @for (food of quickFoods; track food.id) {
+          <div
+            class="quick-chip"
+            [class.active]="selectedQuickFood()?.id === food.id"
+            (click)="selectQuickFood(food)"
+          >
+            <span class="chip-icon">{{ food.icon }}</span>
+            <div>
+              <div class="chip-name">{{ food.name }}</div>
+              <div class="chip-cal">
+                {{ food.protein }}g/{{ food.unit === "g" ? "100g" : food.unit }}
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      @if (selectedQuickFood()) {
+        <div class="quick-selected">
+          <div class="quick-food-name">
+            {{ selectedQuickFood().icon }} {{ selectedQuickFood().name }}
+          </div>
+          @if (getQuickFoodMacros()) {
+            <div class="quick-macros">
+              <div class="quick-macro protein">
+                <div class="qm-val">{{ getQuickFoodMacros()!.protein }}g</div>
+                <div class="qm-label">PROTEIN</div>
+              </div>
+              <div class="quick-macro calories">
+                <div class="qm-val">{{ getQuickFoodMacros()!.calories }}</div>
+                <div class="qm-label">KCAL</div>
+              </div>
+              <div class="quick-macro carbs">
+                <div class="qm-val">{{ getQuickFoodMacros()!.carbs }}g</div>
+                <div class="qm-label">CARBS</div>
+              </div>
+              <div class="quick-macro fat">
+                <div class="qm-val">{{ getQuickFoodMacros()!.fat }}g</div>
+                <div class="qm-label">FAT</div>
+              </div>
+            </div>
+          }
+          <div class="quick-qty-row">
+            <button class="qty-btn" (click)="decrementQty()">−</button>
+            <input
+              type="number"
+              class="qty-input"
+              [ngModel]="quickFoodQty()"
+              (ngModelChange)="quickFoodQty.set(+$event)"
+            />
+            <span class="qty-unit">{{ selectedQuickFood().unit }}</span>
+            <button class="qty-btn" (click)="incrementQty()">+</button>
+          </div>
+          <button
+            class="btn-add-food"
+            style="
+              border-style: solid;
+              color: #000;
+              background: #e8ff47;
+              border-color: #e8ff47;
+            "
+            (click)="addQuickFood()"
+          >
+            + ADD TO LOG
+          </button>
+        </div>
+      }
+
+      <!-- Added foods -->
+      @if (foodEntries().length > 0) {
+        <div class="quick-label">FOODS ADDED</div>
+        @for (entry of foodEntries(); track $index) {
+          <div class="food-entry">
+            <div class="food-entry-info">
+              <div class="food-entry-name">{{ entry.food.description }}</div>
+              <div class="food-entry-macros">
+                {{ entry.calculated.protein }}g protein ·
+                {{ entry.calculated.calories }} kcal
+              </div>
+            </div>
+            <button class="btn-remove-food" (click)="removeFoodEntry($index)">
+              ✕
+            </button>
+          </div>
+        }
+      }
+
+      <!-- Action buttons -->
+      <button class="btn-add-food" (click)="showMealDescriber.set(true)">
+        🍽 DESCRIBE YOUR MEAL
+      </button>
+      <button class="btn-add-food" (click)="showFoodSearch.set(true)">
+        🔍 SEARCH USDA DATABASE
+      </button>
+
+      <!-- Meal Describer -->
+      @if (showMealDescriber()) {
+        <div class="meal-describer">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 10px;
+            "
+          >
+            <div class="quick-label">DESCRIBE YOUR MEAL</div>
+            <button
+              (click)="showMealDescriber.set(false); mealMacros.set(null)"
+              style="
+                background: transparent;
+                border: none;
+                color: #555;
+                cursor: pointer;
+                font-size: 18px;
+              "
+            >
+              ✕
+            </button>
+          </div>
+          <textarea
+            class="meal-textarea"
+            [(ngModel)]="mealDescription"
+            placeholder="e.g. 3 whole eggs, 2 egg whites, 1 slice whole grain bread with avocado spread..."
+          >
+          </textarea>
+          <button
+            class="btn-primary"
+            (click)="calculateMealMacros()"
+            [disabled]="calculatingMeal()"
+          >
+            {{ calculatingMeal() ? "CALCULATING..." : "CALCULATE MACROS →" }}
+          </button>
+
+          @if (mealMacros()) {
+            <div class="meal-result">
+              <div class="quick-macros">
+                <div class="quick-macro protein">
+                  <div class="qm-val">{{ mealMacros().protein }}g</div>
+                  <div class="qm-label">PROTEIN</div>
+                </div>
+                <div class="quick-macro calories">
+                  <div class="qm-val">{{ mealMacros().calories }}</div>
+                  <div class="qm-label">KCAL</div>
+                </div>
+                <div class="quick-macro carbs">
+                  <div class="qm-val">{{ mealMacros().carbs }}g</div>
+                  <div class="qm-label">CARBS</div>
+                </div>
+                <div class="quick-macro fat">
+                  <div class="qm-val">{{ mealMacros().fat }}g</div>
+                  <div class="qm-label">FAT</div>
+                </div>
+              </div>
+
+              @if (mealMacros().breakdown) {
+                <div class="breakdown">
+                  <div class="quick-label" style="margin-top: 10px">
+                    BREAKDOWN
+                  </div>
+                  @for (item of mealMacros().breakdown; track item.name) {
+                    <div class="breakdown-row">
+                      <span class="breakdown-name">{{ item.name }}</span>
+                      <span class="breakdown-macros"
+                        >{{ item.protein }}g · {{ item.calories }} kcal</span
+                      >
+                    </div>
+                  }
+                </div>
+              }
+
+              <div class="save-template-row">
+                <input
+                  class="save-template-input"
+                  [(ngModel)]="newTemplateName"
+                  placeholder="Template name (e.g. My Breakfast)"
+                />
+                <button
+                  class="btn-save-template"
+                  (click)="saveAsTemplate()"
+                  [disabled]="savingTemplate()"
+                >
+                  {{ savingTemplate() ? "..." : "💾 SAVE" }}
+                </button>
+              </div>
+
+              <button
+                class="btn-primary"
+                style="margin-top: 8px"
+                (click)="addMealToLog()"
+              >
+                + ADD TO LOG (WITHOUT SAVING)
+              </button>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Totals -->
+      <div class="nutrition-totals">
+        <div class="total-row">
+          <span>Total Protein</span>
+          <span
+            [class.hit]="nutrition.protein >= 160"
+            [class.miss]="nutrition.protein < 160 && nutrition.protein > 0"
+          >
+            {{ nutrition.protein }}g / 160g
+          </span>
+        </div>
+        <div class="total-row">
+          <span>Total Calories</span>
+          <span
+            [class.hit]="nutrition.calories >= 2500"
+            [class.miss]="nutrition.calories < 2500 && nutrition.calories > 0"
+          >
+            {{ nutrition.calories }} / 2600 kcal
+          </span>
+        </div>
+      </div>
+
       <div class="grid-2">
         <div class="field-group">
-          <label>Protein (g)</label>
-          <input type="number" [(ngModel)]="selectedLog()!.protein">
+          <label>Water (litres)</label>
+          <input
+            type="number"
+            [(ngModel)]="nutrition.water"
+            placeholder="4"
+            step="0.5"
+          />
         </div>
         <div class="field-group">
-          <label>Calories</label>
-          <input type="number" [(ngModel)]="selectedLog()!.calories">
-        </div>
-        <div class="field-group">
-          <label>Water (L)</label>
-          <input type="number" [(ngModel)]="selectedLog()!.water">
-        </div>
-        <div class="field-group">
-          <label>Sleep (hrs)</label>
-          <input type="number" [(ngModel)]="selectedLog()!.sleep">
+          <label>Sleep (hours)</label>
+          <input
+            type="number"
+            [(ngModel)]="nutrition.sleep"
+            placeholder="7.5"
+            step="0.5"
+          />
         </div>
       </div>
-      <div class="field-group">
-        <label>Notes</label>
-        <textarea [(ngModel)]="selectedLog()!.notes"></textarea>
-      </div>
-      <button class="btn-primary" (click)="updateLog()">UPDATE LOG</button>
+
+      @if (savedMsg()) {
+        <div class="success-msg">{{ savedMsg() }}</div>
+      }
+      <button
+        class="btn-primary"
+        (click)="saveNutrition()"
+        [disabled]="saving()"
+      >
+        {{ saving() ? "SAVING..." : "SAVE NUTRITION" }}
+      </button>
     </div>
+
+    @if (showFoodSearch()) {
+      <app-food-search
+        (addFood)="onFoodAdded($event)"
+        (close)="showFoodSearch.set(false)"
+      ></app-food-search>
+    }
   }
 
-  <!-- Last 7 days -->
-  <div class="section-title">LAST 7 DAYS</div>
-  @if (pastLogs().length === 0) {
-    <div class="empty-state">
-      <div class="empty-icon">📋</div>
-      <div>No logs yet. Start logging today.</div>
+  <!-- HISTORY -->
+  @if (activeTab() === "history") {
+    <div class="section-title">PAST LOGS</div>
+    <div class="field-group" style="margin-bottom: 16px">
+      <label>Select Date to Edit</label>
+      <input
+        type="date"
+        [(ngModel)]="selectedDate"
+        (change)="loadLogByDate()"
+        [max]="today"
+        style="
+          background: #1a1a1a;
+          border: 1px solid #2a2a2a;
+          border-radius: 4px;
+          color: #f0f0f0;
+          padding: 8px 10px;
+          width: 100%;
+          outline: none;
+        "
+      />
     </div>
-  }
-  @for (log of pastLogs(); track log.date) {
-    <div class="history-card">
-      <div class="history-header">
-        <div class="history-day">DAY {{log.dayNumber}}</div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <div class="history-date">{{log.date}}</div>
-          <button class="edit-btn" (click)="editLog(log)">EDIT</button>
+    @if (selectedLog()) {
+      <div class="log-card" style="margin-bottom: 16px">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          "
+        >
+          <div class="log-card-title">EDITING — {{ selectedDate }}</div>
+          <button
+            (click)="selectedLog.set(null)"
+            style="
+              background: transparent;
+              border: none;
+              color: #555;
+              cursor: pointer;
+              font-size: 18px;
+            "
+          >
+            ✕
+          </button>
         </div>
+        <div class="field-group">
+          <label>Session</label>
+          <select [(ngModel)]="selectedLog()!.session">
+            <option>Push A — Chest/Shoulders/Triceps</option>
+            <option>Pull A — Back/Biceps</option>
+            <option>Legs</option>
+            <option>Push B — Shoulders/Upper Chest</option>
+            <option>Pull B — Back/Traps/Biceps</option>
+            <option>Active Recovery</option>
+          </select>
+        </div>
+        @if (selectedLogExercises().length > 0) {
+          @for (ex of selectedLogExercises(); track ex.name; let i = $index) {
+            <div class="ex-card ex-expanded">
+              <div class="ex-card-header">
+                <div class="ex-card-name">{{ ex.name }}</div>
+              </div>
+              <div class="sets-header">
+                <span>SET</span><span>LBS</span><span>REPS</span><span></span>
+              </div>
+              @for (set of ex.sets; track si; let si = $index) {
+                <div class="set-row">
+                  <span class="set-num">{{ si + 1 }}</span>
+                  <input
+                    [(ngModel)]="set.weight"
+                    type="number"
+                    class="set-val"
+                  />
+                  <input [(ngModel)]="set.reps" type="number" class="set-val" />
+                  <span></span>
+                </div>
+              }
+            </div>
+          }
+        }
+        <div class="grid-2">
+          <div class="field-group">
+            <label>Protein (g)</label
+            ><input type="number" [(ngModel)]="selectedLog()!.protein" />
+          </div>
+          <div class="field-group">
+            <label>Calories</label
+            ><input type="number" [(ngModel)]="selectedLog()!.calories" />
+          </div>
+          <div class="field-group">
+            <label>Water (L)</label
+            ><input type="number" [(ngModel)]="selectedLog()!.water" />
+          </div>
+          <div class="field-group">
+            <label>Sleep (hrs)</label
+            ><input type="number" [(ngModel)]="selectedLog()!.sleep" />
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Notes</label
+          ><textarea [(ngModel)]="selectedLog()!.notes"></textarea>
+        </div>
+        <button class="btn-primary" (click)="updateLog()">UPDATE LOG</button>
       </div>
-      @if (log.session) {
-        <div class="history-session">{{log.session}}</div>
-      }
-      @if (log.protein && log.protein.trim()) {
-        <div class="nutrition-summary">
-          <span>🥩 {{log.protein}}g</span>
-          <span>🔥 {{log.calories}} kcal</span>
-          <span>💧 {{log.water}}L</span>
-          <span>😴 {{log.sleep}}h</span>
+    }
+    <div class="section-title">LAST 7 DAYS</div>
+    @if (pastLogs().length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">📋</div>
+        <div>No logs yet.</div>
+      </div>
+    }
+    @for (log of pastLogs(); track log.date) {
+      <div class="history-card">
+        <div class="history-header">
+          <div class="history-day">DAY {{ log.dayNumber }}</div>
+          <div style="display: flex; align-items: center; gap: 8px">
+            <div class="history-date">{{ log.date }}</div>
+            <button class="edit-btn" (click)="editLog(log)">EDIT</button>
+          </div>
         </div>
-      }
-    </div>
+        @if (log.session) {
+          <div class="history-session">{{ log.session }}</div>
+        }
+        @if (log.protein && log.protein.trim()) {
+          <div class="nutrition-summary">
+            <span>🥩 {{ log.protein }}g</span>
+            <span>🔥 {{ log.calories }} kcal</span>
+            <span>💧 {{ log.water }}L</span>
+            <span>😴 {{ log.sleep }}h</span>
+          </div>
+        }
+      </div>
+    }
   }
-}
-
-    </div>
+</div>
 
 @if (showPicker()) {
   <app-exercise-picker
     (selectExercise)="onExerciseSelected($event)"
-    (close)="showPicker.set(false)">
-  </app-exercise-picker>
+    (close)="showPicker.set(false)"
+  ></app-exercise-picker>
 }
-
 @if (selectedExerciseDetail()) {
   <app-exercise-detail
     [exercise]="selectedExerciseDetail()!"
     (close)="selectedExerciseDetail.set(null)"
-    (selectAlternative)="onExerciseSelected($event)">
-  </app-exercise-detail>
+    (selectAlternative)="onExerciseSelected($event)"
+  ></app-exercise-detail>
 }
-  

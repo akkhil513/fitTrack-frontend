@@ -1,10 +1,16 @@
-import { Injectable, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Injectable, signal } from "@angular/core";
+import { Router } from "@angular/router";
 import {
-  signIn, signUp, signOut, confirmSignUp,
-  getCurrentUser, fetchAuthSession, updatePassword,
-  type SignInInput, type SignUpInput
-} from 'aws-amplify/auth';
+  signIn,
+  signUp,
+  signOut,
+  confirmSignUp,
+  getCurrentUser,
+  fetchAuthSession,
+  updatePassword,
+  type SignInInput,
+  type SignUpInput,
+} from "aws-amplify/auth";
 
 export interface AuthUser {
   userId: string;
@@ -12,7 +18,7 @@ export interface AuthUser {
   name: string;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class AuthService {
   currentUser = signal<AuthUser | null>(null);
   isLoading = signal(false);
@@ -28,21 +34,25 @@ export class AuthService {
       const token = session.tokens?.idToken?.payload;
       this.currentUser.set({
         userId: user.userId,
-        email: token?.['email'] as string || '',
-        name: token?.['name'] as string || ''
+        email: (token?.["email"] as string) || "",
+        name: (token?.["name"] as string) || "",
       });
     } catch {
       this.currentUser.set(null);
     }
   }
 
-  async signUp(email: string, password: string, name: string): Promise<{ nextStep: any }> {
+  async signUp(
+    email: string,
+    password: string,
+    name: string,
+  ): Promise<{ nextStep: any }> {
     this.isLoading.set(true);
     try {
       const result = await signUp({
         username: email,
         password,
-        options: { userAttributes: { email, name } }
+        options: { userAttributes: { email, name } },
       } as SignUpInput);
       return result;
     } finally {
@@ -59,7 +69,7 @@ export class AuthService {
     try {
       await signIn({ username: email, password } as SignInInput);
       await this.loadCurrentUser();
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(["/dashboard"]);
     } finally {
       this.isLoading.set(false);
     }
@@ -68,12 +78,12 @@ export class AuthService {
   async signOut(): Promise<void> {
     await signOut();
     this.currentUser.set(null);
-    this.router.navigate(['/auth/login']);
+    this.router.navigate(["/auth/login"]);
   }
 
   async getToken(): Promise<string> {
     const session = await fetchAuthSession();
-    return session.tokens?.idToken?.toString() || '';
+    return session.tokens?.idToken?.toString() || "";
   }
 
   isAuthenticated(): boolean {

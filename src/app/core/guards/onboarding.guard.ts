@@ -1,8 +1,8 @@
-import { inject } from '@angular/core';
-import { Router, type CanActivateFn } from '@angular/router';
-import { ApiService } from '../services/api.service';
-import { AuthService } from '../services/auth.service';
-import { catchError, map, of, from, switchMap } from 'rxjs';
+import { inject } from "@angular/core";
+import { Router, type CanActivateFn } from "@angular/router";
+import { ApiService } from "../services/api.service";
+import { AuthService } from "../services/auth.service";
+import { catchError, map, of, from, switchMap } from "rxjs";
 
 export const onboardingGuard: CanActivateFn = () => {
   const api = inject(ApiService);
@@ -18,11 +18,11 @@ export const onboardingGuard: CanActivateFn = () => {
         map(() => true),
         catchError((err) => {
           if (err.status === 404) {
-            return of(router.createUrlTree(['/onboarding']));
+            return of(router.createUrlTree(["/onboarding"]));
           }
           return of(true);
-        })
+        }),
       );
-    })
+    }),
   );
 };

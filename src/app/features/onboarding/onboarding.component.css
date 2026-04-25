@@ -1,46 +1,116 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap");
 
-    :host { display: block; }
+:host {
+  display: block;
+}
 
-    .font-display { font-family: 'Bebas Neue', sans-serif; }
-    .font-mono { font-family: 'DM Mono', monospace; }
-    .font-body { font-family: 'DM Sans', sans-serif; }
+.font-display {
+  font-family: "Bebas Neue", sans-serif;
+}
+.font-mono {
+  font-family: "DM Mono", monospace;
+}
+.font-body {
+  font-family: "DM Sans", sans-serif;
+}
 
-    .field-group { display: flex; flex-direction: column; gap: 6px; }
-    .field-group label { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 2px; font-family: 'DM Mono', monospace; }
-    .field-group input, .field-group select {
-      background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 6px;
-      color: #f0f0f0; font-family: 'DM Sans', sans-serif; font-size: 14px;
-      padding: 10px 12px; outline: none; transition: border-color 0.2s; width: 100%;
-    }
-    .field-group input:focus, .field-group select:focus { border-color: #e8ff47; }
-    .field-group select option { background: #1a1a1a; }
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.field-group label {
+  font-size: 11px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-family: "DM Mono", monospace;
+}
+.field-group input,
+.field-group select {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 6px;
+  color: #f0f0f0;
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+.field-group input:focus,
+.field-group select:focus {
+  border-color: #e8ff47;
+}
+.field-group select option {
+  background: #1a1a1a;
+}
 
-    .checkbox-btn {
-      padding: 8px 10px; background: #1a1a1a; border: 1px solid #2a2a2a;
-      border-radius: 6px; color: #888; font-size: 12px; cursor: pointer;
-      transition: all 0.2s; text-align: left;
-    }
-    .checkbox-btn.selected { background: #e8ff4715; border-color: #e8ff47; color: #e8ff47; }
+.checkbox-btn {
+  padding: 8px 10px;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 6px;
+  color: #888;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+.checkbox-btn.selected {
+  background: #e8ff4715;
+  border-color: #e8ff47;
+  color: #e8ff47;
+}
 
-    .btn-primary {
-      padding: 14px 24px; background: #e8ff47; color: #000;
-      border: none; border-radius: 6px; font-family: 'Bebas Neue', sans-serif;
-      font-size: 16px; letter-spacing: 2px; cursor: pointer; transition: opacity 0.2s;
-    }
-    .btn-primary:hover { opacity: 0.85; }
-    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-primary {
+  padding: 14px 24px;
+  background: #e8ff47;
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.btn-primary:hover {
+  opacity: 0.85;
+}
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
 
-    .btn-ghost {
-      padding: 14px 24px; background: transparent; color: #888;
-      border: 1px solid #2a2a2a; border-radius: 6px; font-family: 'Bebas Neue', sans-serif;
-      font-size: 16px; letter-spacing: 2px; cursor: pointer; transition: all 0.2s;
-    }
-    .btn-ghost:hover { border-color: #e8ff47; color: #e8ff47; }
+.btn-ghost {
+  padding: 14px 24px;
+  background: transparent;
+  color: #888;
+  border: 1px solid #2a2a2a;
+  border-radius: 6px;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-ghost:hover {
+  border-color: #e8ff47;
+  color: #e8ff47;
+}
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .animate-fade-up { animation: fadeUp 0.3s ease both; }
-  
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-up {
+  animation: fadeUp 0.3s ease both;
+}

@@ -18,7 +18,7 @@ export class ProfileComponent implements OnInit {
   savingMeasurements = signal(false);
   savedMsg = signal("");
   measurementSavedMsg = signal("");
-  activeSection = signal<"info" | "plan" | "stats">("info");
+  activeSection = signal<"plan" | "stats">("plan");
 
   user = signal<any>(null);
   editName = "";
@@ -113,14 +113,13 @@ export class ProfileComponent implements OnInit {
     const parts = this.editName.split(" ");
     const firstName = parts[0];
     const lastName = parts.slice(1).join(" ") || "";
-    if (this.editStartDate)
-      localStorage.setItem("startDate", this.editStartDate);
     this.api
       .updateProfile({ firstName, lastName, startDate: this.editStartDate })
       .subscribe({
         next: () => {
           this.saving.set(false);
           this.savedMsg.set("✓ Profile updated!");
+          localStorage.setItem("startDate", this.editStartDate);
           this.loadProfile();
           setTimeout(() => this.savedMsg.set(""), 3000);
         },

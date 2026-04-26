@@ -8,7 +8,7 @@
 
 .profile-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 16px;
   margin-bottom: 16px;
   padding: 16px;
@@ -18,17 +18,18 @@
 }
 
 .avatar {
-  width: 52px;
-  height: 52px;
+  width: 44px;
+  height: 44px;
   background: #e8ff47;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: "Bebas Neue", sans-serif;
-  font-size: 26px;
+  font-size: 22px;
   color: #000;
   flex-shrink: 0;
+  margin-top: 4px;
 }
 
 .profile-name {
@@ -183,6 +184,33 @@
   line-height: 1.6;
   font-family: "DM Sans", sans-serif;
 }
+
+.plan-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.plan-bullets li {
+  font-size: 13px;
+  color: #ccc;
+  line-height: 1.5;
+  font-family: "DM Sans", sans-serif;
+  padding-left: 14px;
+  position: relative;
+}
+
+.plan-bullets li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: #e8ff47;
+  font-size: 11px;
+}
+
 .strategy-card .plan-label {
   color: #e8ff47;
 }

@@ -2,20 +2,53 @@
   @if (loading()) {
     <div class="loading-state">Loading profile...</div>
   } @else {
-    <!-- Header -->
+    <!-- Header — editable -->
     <div class="profile-header">
       <div class="avatar">{{ user()?.firstName?.charAt(0) || "A" }}</div>
-      <div class="profile-info">
-        <div class="profile-name">
-          {{ user()?.firstName }} {{ user()?.lastName }}
+      <div class="profile-info" style="flex: 1">
+        <div class="card-title" style="margin-bottom: 12px">PERSONAL INFO</div>
+        <div class="field-group" style="margin-bottom: 6px">
+          <label>Full Name</label>
+          <input type="text" [(ngModel)]="editName" />
         </div>
-        <div class="profile-username">
-          &#64;{{ user()?.username || "user" }}
+        <div class="field-group" style="margin-bottom: 6px">
+          <label>Username</label>
+          <input
+            type="text"
+            [value]="user()?.username || ''"
+            disabled
+            class="disabled"
+          />
         </div>
-        <div class="profile-stats">
+        <div class="field-group" style="margin-bottom: 6px">
+          <label>Email</label>
+          <input
+            type="text"
+            [value]="user()?.email || ''"
+            disabled
+            class="disabled"
+          />
+        </div>
+        <div class="field-group" style="margin-bottom: 6px">
+          <label>Challenge Start Date</label>
+          <input type="date" [(ngModel)]="editStartDate" />
+        </div>
+        <div class="profile-stats" style="margin-bottom: 8px">
           <span class="stat-pill">DAY {{ getDayNumber() }}</span>
           <span class="stat-pill">{{ getDaysRemaining() }} DAYS LEFT</span>
         </div>
+        @if (savedMsg()) {
+          <div class="success-msg" style="margin-bottom: 6px">
+            {{ savedMsg() }}
+          </div>
+        }
+        <button
+          class="btn-primary"
+          (click)="saveProfile()"
+          [disabled]="saving()"
+        >
+          {{ saving() ? "SAVING..." : "SAVE CHANGES" }}
+        </button>
       </div>
     </div>
 
@@ -39,12 +72,6 @@
     <!-- Tabs -->
     <div class="section-tabs">
       <button
-        [class.active]="activeSection() === 'info'"
-        (click)="activeSection.set('info')"
-      >
-        PROFILE
-      </button>
-      <button
         [class.active]="activeSection() === 'plan'"
         (click)="activeSection.set('plan')"
       >
@@ -58,50 +85,6 @@
       </button>
     </div>
 
-    <!-- PROFILE TAB -->
-    @if (activeSection() === "info") {
-      <div class="section-card">
-        <div class="card-title">PERSONAL INFO</div>
-        <div class="field-group">
-          <label>Full Name</label>
-          <input type="text" [(ngModel)]="editName" />
-        </div>
-        <div class="field-group">
-          <label>Username</label>
-          <input
-            type="text"
-            [value]="user()?.username || ''"
-            disabled
-            class="disabled"
-          />
-        </div>
-        <div class="field-group">
-          <label>Email</label>
-          <input
-            type="text"
-            [value]="user()?.email || ''"
-            disabled
-            class="disabled"
-          />
-        </div>
-        <div class="field-group">
-          <label>Challenge Start Date</label>
-          <input type="date" [(ngModel)]="editStartDate"/>
-          <span class="hint">Changing this recalculates your day numbers</span>
-        </div>
-        @if (savedMsg()) {
-          <div class="success-msg">{{ savedMsg() }}</div>
-        }
-        <button
-          class="btn-primary"
-          (click)="saveProfile()"
-          [disabled]="saving()"
-        >
-          {{ saving() ? "SAVING..." : "SAVE CHANGES" }}
-        </button>
-      </div>
-    }
-
     <!-- MY PLAN TAB -->
     @if (activeSection() === "plan") {
       @if (plan()) {
@@ -111,7 +94,13 @@
 
         <div class="plan-card strategy-card">
           <div class="plan-label">🎯 STRATEGY</div>
-          <div class="plan-text">{{ plan().strategy }}</div>
+          <ul class="plan-bullets">
+            @for (point of plan().strategy.split("."); track $index) {
+              @if (point.trim()) {
+                <li>{{ point.trim() }}</li>
+              }
+            }
+          </ul>
         </div>
 
         <div class="plan-card training-card">
@@ -154,17 +143,35 @@
 
         <div class="plan-card nutrition-card">
           <div class="plan-label">🥩 NUTRITION</div>
-          <div class="plan-text">{{ plan().nutrition }}</div>
+          <ul class="plan-bullets">
+            @for (point of plan().nutrition.split("."); track $index) {
+              @if (point.trim()) {
+                <li>{{ point.trim() }}</li>
+              }
+            }
+          </ul>
         </div>
 
         <div class="plan-card supplements-card">
           <div class="plan-label">💊 SUPPLEMENTS</div>
-          <div class="plan-text">{{ plan().supplements }}</div>
+          <ul class="plan-bullets">
+            @for (point of plan().supplements.split("."); track $index) {
+              @if (point.trim()) {
+                <li>{{ point.trim() }}</li>
+              }
+            }
+          </ul>
         </div>
 
         <div class="plan-card recovery-card">
           <div class="plan-label">😴 RECOVERY</div>
-          <div class="plan-text">{{ plan().recovery }}</div>
+          <ul class="plan-bullets">
+            @for (point of plan().recovery.split("."); track $index) {
+              @if (point.trim()) {
+                <li>{{ point.trim() }}</li>
+              }
+            }
+          </ul>
         </div>
 
         <button class="btn-regenerate" (click)="regeneratePlan()">

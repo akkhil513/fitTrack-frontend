@@ -43,6 +43,7 @@ export class DashboardComponent implements OnInit {
         if (u.startDate) {
           localStorage.setItem("startDate", u.startDate);
         }
+        this.loadDayNumber();
       },
     });
   }

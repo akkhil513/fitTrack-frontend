@@ -1,0 +1,126 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap");
+
+.pwa-container {
+  min-height: 100vh;
+  background: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.pwa-box {
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.pwa-brand {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 14px;
+  letter-spacing: 4px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.pwa-title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 42px;
+  color: #f0f0f0;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.pwa-title span {
+  color: #e8ff47;
+}
+
+.pwa-sub {
+  font-size: 13px;
+  color: #555;
+  font-family: "DM Mono", monospace;
+  margin-bottom: 32px;
+}
+
+.pwa-step {
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.pwa-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.pwa-step-title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.pwa-step-text {
+  font-size: 16px;
+  color: #f0f0f0;
+  font-family: "DM Sans", sans-serif;
+  line-height: 1.5;
+}
+
+.pwa-step-text strong {
+  color: #e8ff47;
+}
+
+.pwa-hint {
+  font-size: 11px;
+  color: #444;
+  font-family: "DM Mono", monospace;
+  margin-top: 8px;
+}
+
+.pwa-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.pwa-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2a2a2a;
+  transition: background 0.2s;
+}
+
+.pwa-dot.active {
+  background: #e8ff47;
+}
+
+.pwa-btn {
+  width: 100%;
+  padding: 14px;
+  background: #e8ff47;
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+
+.pwa-skip {
+  font-size: 12px;
+  color: #444;
+  font-family: "DM Mono", monospace;
+  cursor: pointer;
+}
+
+.pwa-skip:hover {
+  color: #888;
+}

@@ -22,6 +22,14 @@ export const routes: Routes = [
       ),
   },
 
+  {
+    path: "pwa-guide",
+    loadComponent: () =>
+      import("./features/pwa-guide/pwa-guide.component").then(
+        (m) => m.PwaGuideComponent,
+      ),
+  },
+
   // Main app — protected
   {
     path: "dashboard",

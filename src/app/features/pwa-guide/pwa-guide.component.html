@@ -1,0 +1,84 @@
+<div class="pwa-container">
+  <div class="pwa-box">
+    <div class="pwa-brand">FITTRACK</div>
+    <div class="pwa-title">ADD TO YOUR<br /><span>HOME SCREEN</span></div>
+    <div class="pwa-sub">
+      Get the full app experience - works like a native app
+    </div>
+
+    @if (isIOS()) {
+      @if (step() === 0) {
+        <div class="pwa-step">
+          <div class="pwa-icon">📱</div>
+          <div class="pwa-step-title">STEP 1 OF 3</div>
+          <div class="pwa-step-text">
+            Open this page in <strong>Safari</strong> on your iPhone
+          </div>
+          <div class="pwa-hint">
+            Chrome won't work for iOS home screen install
+          </div>
+        </div>
+      }
+      @if (step() === 1) {
+        <div class="pwa-step">
+          <div class="pwa-icon">⬆️</div>
+          <div class="pwa-step-title">STEP 2 OF 3</div>
+          <div class="pwa-step-text">
+            Tap the <strong>Share button</strong> (□↑) at the bottom of Safari
+          </div>
+        </div>
+      }
+      @if (step() === 2) {
+        <div class="pwa-step">
+          <div class="pwa-icon">➕</div>
+          <div class="pwa-step-title">STEP 3 OF 3</div>
+          <div class="pwa-step-text">
+            Scroll down and tap <strong>"Add to Home Screen"</strong> then tap
+            <strong>"Add"</strong>
+          </div>
+        </div>
+      }
+    } @else {
+      @if (step() === 0) {
+        <div class="pwa-step">
+          <div class="pwa-icon">📱</div>
+          <div class="pwa-step-title">STEP 1 OF 3</div>
+          <div class="pwa-step-text">
+            Open this page in <strong>Chrome</strong> on your mobile device
+          </div>
+        </div>
+      }
+      @if (step() === 1) {
+        <div class="pwa-step">
+          <div class="pwa-icon">⋮</div>
+          <div class="pwa-step-title">STEP 2 OF 3</div>
+          <div class="pwa-step-text">
+            Tap the <strong>3 dots menu</strong> in the top right corner
+          </div>
+        </div>
+      }
+      @if (step() === 2) {
+        <div class="pwa-step">
+          <div class="pwa-icon">➕</div>
+          <div class="pwa-step-title">STEP 3 OF 3</div>
+          <div class="pwa-step-text">
+            Tap <strong>"Add to Home Screen"</strong> then tap
+            <strong>"Add"</strong>
+          </div>
+        </div>
+      }
+    }
+
+    <div class="pwa-dots">
+      @for (i of [0, 1, 2]; track i) {
+        <div class="pwa-dot" [class.active]="step() === i"></div>
+      }
+    </div>
+
+    <button class="pwa-btn" (click)="next()">
+      {{ step() < 2 ? 'NEXT →' : 'GOT IT — CONTINUE →' }}
+    </button>
+
+    <div class="pwa-skip" (click)="done()">Skip for now</div>
+  </div>
+</div>

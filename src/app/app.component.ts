@@ -1,5 +1,5 @@
-import { Component } from "@angular/core";
-import { RouterOutlet } from "@angular/router";
+import { Component, OnInit } from "@angular/core";
+import { Router, RouterOutlet } from "@angular/router";
 import { Amplify } from "aws-amplify";
 import { environment } from "../environments/environment";
 
@@ -19,4 +19,13 @@ Amplify.configure({
   imports: [RouterOutlet],
   template: `<router-outlet />`,
 })
-export class AppComponent {}
+export class AppComponent implements OnInit {
+  constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    const shown = localStorage.getItem("pwaGuideShown");
+    if (!shown && this.router.url !== "/pwa-guide") {
+      this.router.navigate(["/pwa-guide"]);
+    }
+  }
+}

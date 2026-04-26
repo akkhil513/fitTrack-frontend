@@ -12,7 +12,7 @@
 
       <div class="field">
         <label>Full Name</label>
-        <input type="text" [(ngModel)]="name" placeholder="Akhil Gollapalli" />
+        <input type="text" [(ngModel)]="name" placeholder="Full Name" />
       </div>
 
       <div class="field">
@@ -22,7 +22,7 @@
             type="text"
             [(ngModel)]="username"
             (ngModelChange)="onUsernameChange()"
-            placeholder="akhil_fit"
+            placeholder="Username"
             [class.available]="usernameStatus() === 'available'"
             [class.taken]="usernameStatus() === 'taken'"
           />
@@ -46,7 +46,7 @@
 
       <div class="field">
         <label>Email</label>
-        <input type="email" [(ngModel)]="email" placeholder="you@email.com" />
+        <input type="email" [(ngModel)]="email" placeholder="Email" />
       </div>
       <div class="field">
         <label>Password</label>

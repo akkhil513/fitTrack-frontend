@@ -183,4 +183,13 @@ export class ProfileComponent implements OnInit {
   getProgressPct(): number {
     return Math.round((this.getDayNumber() / 100) * 100);
   }
+
+  splitIntoBullets(text: string): string[] {
+    if (!text) return [];
+    // Split on sentence-ending periods but preserve decimal numbers like 73.5.
+    return text
+      .split(/\.(?!\d)(?:\s+|\n)/)
+      .map((s) => s.trim())
+      .filter((s) => s.length > 3);
+  }
 }

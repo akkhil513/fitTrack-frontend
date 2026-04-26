@@ -1,429 +1,524 @@
-<div
-  class="min-h-screen bg-bg text-white font-body"
-  style="background: #0a0a0a"
->
-  <div class="max-w-lg mx-auto px-5 py-8">
-    <!-- Header -->
-    <div class="mb-8">
-      <div class="text-xs font-mono tracking-widest text-gray-500 mb-2">
-        FITTRACK · SETUP
-      </div>
-      <div class="text-5xl font-display tracking-wide text-white leading-none">
-        BUILD YOUR<br /><span style="color: #e8ff47">PLAN</span>
-      </div>
+<div class="onboarding-container">
+  <!-- Top bar -->
+  <div class="onboarding-topbar">
+    <div class="onboarding-brand">FITTRACK · SETUP</div>
+    <button class="btn-cancel" (click)="cancel()">✕ CANCEL</button>
+  </div>
+
+  <!-- Header -->
+  <div class="onboarding-header">
+    <div class="onboarding-title">
+      BUILD YOUR<br /><span class="onboarding-title-accent">PLAN</span>
     </div>
+  </div>
 
-    <!-- Progress -->
-    <div class="flex gap-1 mb-8">
-      @for (s of steps; track s.id) {
-        <div
-          class="flex-1 h-1 rounded-full transition-all duration-300"
-          [style.background]="currentStep() >= s.id ? '#e8ff47' : '#2a2a2a'"
-        ></div>
-      }
-    </div>
-
-    <!-- Step indicator -->
-    <div class="text-xs font-mono text-gray-500 mb-4 tracking-widest">
-      STEP {{ currentStep() }} OF {{ steps.length }} —
-      {{ steps[currentStep() - 1].title }}
-    </div>
-
-    <!-- STEP 1 — Basic Stats -->
-    @if (currentStep() === 1) {
-      <div class="space-y-4 animate-fade-up">
-        <div class="text-xl font-display tracking-wide mb-6">
-          YOUR BODY STATS
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <div class="field-group">
-            <label>Age</label>
-            <input type="number" [(ngModel)]="answers.age" placeholder="27" />
-          </div>
-          <div class="field-group">
-            <label>Gender</label>
-            <select [(ngModel)]="answers.gender">
-              <option value="">Select</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div class="field-group">
-            <label>Height</label>
-            <input
-              type="text"
-              [(ngModel)]="answers.height"
-              placeholder="5'8&quot;"
-            />
-          </div>
-          <div class="field-group">
-            <label>Weight (kg)</label>
-            <input
-              type="number"
-              [(ngModel)]="answers.weight"
-              placeholder="73.5"
-              step="0.1"
-            />
-          </div>
-        </div>
-        <div class="field-group">
-          <label>Current Physique</label>
-          <select [(ngModel)]="answers.physique">
-            <option value="">Select</option>
-            <option value="Skinny / Lean">
-              Skinny / Lean (low fat, low muscle)
-            </option>
-            <option value="Skinny-fat">
-              Skinny-fat (low muscle, some fat)
-            </option>
-            <option value="Average">
-              Average (moderate muscle, moderate fat)
-            </option>
-            <option value="Athletic">Athletic (good muscle, low fat)</option>
-            <option value="Curvy">Curvy (higher body fat, some muscle)</option>
-            <option value="Stocky">Stocky / Solid (heavier build)</option>
-            <option value="Overweight">Overweight (higher body fat)</option>
-          </select>
-        </div>
-        <div class="field-group">
-          <label>Where do you store fat? (select all that apply)</label>
-          <div class="grid grid-cols-2 gap-2 mt-2">
-            @for (area of fatStorageOptions; track area) {
-              <button
-                type="button"
-                class="checkbox-btn"
-                [class.selected]="answers.fatStorage.includes(area)"
-                (click)="toggleFatStorage(area)"
-              >
-                {{ area }}
-              </button>
-            }
-          </div>
-        </div>
-      </div>
+  <!-- Progress bar -->
+  <div class="progress-bar">
+    @for (s of steps; track s.id) {
+      <div
+        class="progress-segment"
+        [style.background]="currentStep() >= s.id ? '#e8ff47' : '#2a2a2a'"
+      ></div>
     }
+  </div>
 
-    <!-- STEP 2 — Goals -->
-    @if (currentStep() === 2) {
-      <div class="space-y-4 animate-fade-up">
-        <div class="text-xl font-display tracking-wide mb-6">YOUR GOALS</div>
-        <div class="field-group">
-          <label>Primary Goal</label>
-          <select [(ngModel)]="answers.primaryGoal">
-            <option value="">Select</option>
-            <option value="Tone up and lose fat">Tone up and lose fat</option>
-            <option value="Build glutes and legs">Build glutes and legs</option>
-            <option value="Hourglass figure">Achieve hourglass figure</option>
-            <option value="Build visible muscle (aesthetics)">
-              Build visible muscle mass
-            </option>
-            <option value="Get stronger AND bigger">
-              Get stronger AND bigger
-            </option>
-            <option value="Look bigger/broader">Look bigger / broader</option>
-            <option value="Overall fitness and health">
-              Overall fitness and health
-            </option>
-            <option value="All of the above">All of the above</option>
-            <option value="custom">Other (specify below)</option>
-          </select>
-          @if (answers.primaryGoal === "custom") {
-            <input
-              type="text"
-              [(ngModel)]="customGoal"
-              placeholder="Describe your goal..."
-              style="margin-top: 8px"
-            />
-          }
-        </div>
-        <div class="field-group">
-          <label>Bulk Approach</label>
-          <select [(ngModel)]="answers.bulkApproach">
-            <option value="">Select</option>
-            <option value="Cut / Lose fat">
-              Cut / Lose fat (reduce body fat)
-            </option>
-            <option value="Maintain">Maintain (keep current weight)</option>
-            <option value="Lean bulk">
-              Lean bulk (slow muscle gain, minimal fat)
-            </option>
-            <option value="Moderate bulk">
-              Moderate bulk (some fat gain OK)
-            </option>
-            <option value="Aggressive bulk">
-              Aggressive bulk (eat big, gain fast)
-            </option>
-          </select>
-        </div>
-        <div class="field-group">
-          <label>Visual Priorities (select all that apply)</label>
-          <div class="grid grid-cols-2 gap-2 mt-2">
-            @for (goal of visualGoalOptions; track goal) {
-              <button
-                type="button"
-                class="checkbox-btn"
-                [class.selected]="answers.visualGoals.includes(goal)"
-                (click)="toggleArray(answers.visualGoals, goal)"
-              >
-                {{ goal }}
-              </button>
-            }
-          </div>
-        </div>
-      </div>
-    }
+  <!-- Step indicator -->
+  <div class="step-indicator">
+    STEP {{ currentStep() }} OF {{ steps.length }} —
+    {{ steps[currentStep() - 1].title }}
+  </div>
 
-    <!-- STEP 3 — Training -->
-    @if (currentStep() === 3) {
-      <div class="space-y-4 animate-fade-up">
-        <div class="text-xl font-display tracking-wide mb-6">
-          TRAINING BACKGROUND
+  <!-- STEP 1 -->
+  @if (currentStep() === 1) {
+    <div class="step-content animate-fade-up">
+      <div class="step-title">YOUR BODY STATS</div>
+      <div class="grid-2">
+        <div class="field-group">
+          <label>Age</label>
+          <input type="number" [(ngModel)]="answers.age" placeholder="27" />
         </div>
         <div class="field-group">
-          <label>Experience Level</label>
-          <select [(ngModel)]="answers.trainingLevel">
+          <label>Gender</label>
+          <select [(ngModel)]="answers.gender">
             <option value="">Select</option>
-            <option value="Complete beginner">
-              Complete beginner (under 6 months)
-            </option>
-            <option value="Beginner">
-              Beginner (6-12 months, inconsistent)
-            </option>
-            <option value="Intermediate">Intermediate (1-2 years)</option>
-            <option value="Advanced">Advanced (4+ years)</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
           </select>
         </div>
         <div class="field-group">
-          <label>Gym Access</label>
-          <select [(ngModel)]="answers.gymAccess">
-            <option value="">Select</option>
-            <option value="Full gym">
-              Full gym (barbells, dumbbells, cables)
-            </option>
-            <option value="Decent gym">Decent gym (no barbell)</option>
-            <option value="Home gym">Home gym (dumbbells only)</option>
-            <option value="Bodyweight">Bodyweight only</option>
-          </select>
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <div class="field-group">
-            <label>Days Per Week</label>
-            <select [(ngModel)]="answers.daysPerWeek">
-              <option [value]="3">3 days</option>
-              <option [value]="4">4 days</option>
-              <option [value]="5">5 days</option>
-              <option [value]="6">6 days</option>
-            </select>
-          </div>
-          <div class="field-group">
-            <label>Session Duration</label>
-            <select [(ngModel)]="answers.sessionDuration">
-              <option value="45 minutes">45 min</option>
-              <option value="60 minutes">60 min</option>
-              <option value="75-90 minutes">75-90 min</option>
-              <option value="2+ hours">2+ hours</option>
-            </select>
-          </div>
-        </div>
-        <div class="field-group">
-          <label>Preferred Training Time</label>
-          <select [(ngModel)]="answers.preferredTrainTime">
-            <option value="Morning">Morning (6-9am)</option>
-            <option value="Afternoon">Afternoon (12-3pm)</option>
-            <option value="Evening">Evening (4-7pm)</option>
-            <option value="Night">Night (7-10pm)</option>
-          </select>
-        </div>
-      </div>
-    }
-
-    <!-- STEP 4 — Nutrition -->
-    @if (currentStep() === 4) {
-      <div class="space-y-4 animate-fade-up">
-        <div class="text-xl font-display tracking-wide mb-6">NUTRITION</div>
-        <div class="field-group">
-          <label>Diet Type</label>
-          <select [(ngModel)]="answers.dietType">
-            <option value="">Select</option>
-            <option value="Non-vegetarian">
-              Non-vegetarian (eat everything)
-            </option>
-            <option value="Vegetarian">Vegetarian (no meat)</option>
-            <option value="Eggetarian">Eggetarian</option>
-            <option value="Vegan">Vegan</option>
-          </select>
-        </div>
-        <div class="field-group">
-          <label>Food Preference</label>
-          <select [(ngModel)]="answers.foodPreference">
-            <option value="Indian">Primarily Indian food</option>
-            <option value="Mix">Mix of Indian and non-Indian</option>
-            <option value="Non-Indian">Primarily non-Indian</option>
-            <option value="No preference">No preference</option>
-          </select>
-        </div>
-        <div class="field-group">
-          <label>Appetite</label>
-          <select [(ngModel)]="answers.appetite">
-            <option value="Small">Small (struggle to eat enough)</option>
-            <option value="Moderate">Moderate (eat reasonably well)</option>
-            <option value="Good">Good appetite</option>
-            <option value="Very high">Very high appetite</option>
-          </select>
-        </div>
-        <div class="field-group">
-          <label>Supplements (select all)</label>
-          <div class="grid grid-cols-2 gap-2 mt-2">
-            @for (s of supplementOptions; track s) {
-              <button
-                type="button"
-                class="checkbox-btn"
-                [class.selected]="answers.supplements.includes(s)"
-                (click)="toggleArray(answers.supplements, s)"
-              >
-                {{ s }}
-              </button>
-            }
-          </div>
-        </div>
-      </div>
-    }
-
-    <!-- STEP 5 — Lifestyle -->
-    @if (currentStep() === 5) {
-      <div class="space-y-4 animate-fade-up">
-        <div class="text-xl font-display tracking-wide mb-6">
-          LIFESTYLE & RECOVERY
-        </div>
-        <div class="field-group">
-          <label>Sleep Hours</label>
-          <select [(ngModel)]="answers.sleepHours">
-            <option value="Under 6 hours">Under 6 hours (poor)</option>
-            <option value="6-7 hours">6-7 hours (average)</option>
-            <option value="7-8 hours">7-8 hours (decent)</option>
-            <option value="8+ hours">8+ hours (good)</option>
-          </select>
-        </div>
-        <div class="field-group">
-          <label>Stress Level</label>
-          <select [(ngModel)]="answers.stressLevel">
-            <option value="Low">Low stress</option>
-            <option value="Moderate">Moderate stress</option>
-            <option value="High">High stress</option>
-            <option value="Very high">Very high / burnout</option>
-          </select>
-        </div>
-        <div class="field-group">
-          <label>Injuries / Limitations</label>
-          <div class="grid grid-cols-2 gap-2 mt-2">
-            @for (inj of injuryOptions; track inj) {
-              <button
-                type="button"
-                class="checkbox-btn"
-                [class.selected]="answers.injuries.includes(inj)"
-                (click)="toggleArray(answers.injuries, inj)"
-              >
-                {{ inj }}
-              </button>
-            }
-          </div>
+          <label>Height</label>
           <input
             type="text"
-            [(ngModel)]="customInjury"
-            placeholder="Any other injuries or limitations..."
-            style="margin-top: 8px"
+            [(ngModel)]="answers.height"
+            placeholder="5'8&quot;"
           />
         </div>
         <div class="field-group">
-          <label>Coaching Style</label>
-          <select [(ngModel)]="answers.coachingStyle">
-            <option value="Strict">Strict (tell me exactly what to do)</option>
-            <option value="Flexible">Structured but flexible</option>
-            <option value="Relaxed">Relaxed guidance</option>
+          <label>Weight (kg)</label>
+          <input
+            type="number"
+            [(ngModel)]="answers.weight"
+            placeholder="73.5"
+            step="0.1"
+          />
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Current Physique</label>
+        <select [(ngModel)]="answers.physique">
+          <option value="">Select</option>
+          <option value="Skinny / Lean">
+            Skinny / Lean (low fat, low muscle)
+          </option>
+          <option value="Skinny-fat">Skinny-fat (low muscle, some fat)</option>
+          <option value="Average">
+            Average (moderate muscle, moderate fat)
+          </option>
+          <option value="Athletic">Athletic (good muscle, low fat)</option>
+          <option value="Curvy">Curvy (higher body fat, some muscle)</option>
+          <option value="Stocky">Stocky / Solid (heavier build)</option>
+          <option value="Overweight">Overweight (higher body fat)</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Where do you store fat? (select all)</label>
+        <div class="checkbox-grid">
+          @for (area of fatStorageOptions; track area) {
+            <button
+              type="button"
+              class="checkbox-btn"
+              [class.selected]="answers.fatStorage.includes(area)"
+              (click)="toggleFatStorage(area)"
+            >
+              {{ area }}
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- STEP 2 -->
+  @if (currentStep() === 2) {
+    <div class="step-content animate-fade-up">
+      <div class="step-title">YOUR GOALS</div>
+      <div class="field-group">
+        <label>Primary Goal</label>
+        <select [(ngModel)]="answers.primaryGoal">
+          <option value="">Select</option>
+          <option value="Tone up and lose fat">Tone up and lose fat</option>
+          <option value="Build glutes and legs">Build glutes and legs</option>
+          <option value="Hourglass figure">Achieve hourglass figure</option>
+          <option value="Build visible muscle (aesthetics)">
+            Build visible muscle mass
+          </option>
+          <option value="Get stronger AND bigger">
+            Get stronger AND bigger
+          </option>
+          <option value="Look bigger/broader">Look bigger / broader</option>
+          <option value="Overall fitness and health">
+            Overall fitness and health
+          </option>
+          <option value="All of the above">All of the above</option>
+          <option value="custom">Other (specify below)</option>
+        </select>
+        @if (answers.primaryGoal === "custom") {
+          <input
+            type="text"
+            [(ngModel)]="customGoal"
+            placeholder="Describe your goal..."
+            style="margin-top: 8px"
+          />
+        }
+      </div>
+      <div class="field-group">
+        <label>Bulk Approach</label>
+        <select [(ngModel)]="answers.bulkApproach">
+          <option value="">Select</option>
+          <option value="Cut / Lose fat">
+            Cut / Lose fat (reduce body fat)
+          </option>
+          <option value="Maintain">Maintain (keep current weight)</option>
+          <option value="Lean bulk">
+            Lean bulk (slow muscle gain, minimal fat)
+          </option>
+          <option value="Moderate bulk">
+            Moderate bulk (some fat gain OK)
+          </option>
+          <option value="Aggressive bulk">
+            Aggressive bulk (eat big, gain fast)
+          </option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Visual Priorities (select all)</label>
+        <div class="checkbox-grid">
+          @for (goal of visualGoalOptions; track goal) {
+            <button
+              type="button"
+              class="checkbox-btn"
+              [class.selected]="answers.visualGoals.includes(goal)"
+              (click)="toggleArray(answers.visualGoals, goal)"
+            >
+              {{ goal }}
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- STEP 3 -->
+  @if (currentStep() === 3) {
+    <div class="step-content animate-fade-up">
+      <div class="step-title">TRAINING BACKGROUND</div>
+      <div class="field-group">
+        <label>Experience Level</label>
+        <select [(ngModel)]="answers.trainingLevel">
+          <option value="">Select</option>
+          <option value="Complete beginner">
+            Complete beginner (under 6 months)
+          </option>
+          <option value="Beginner">Beginner (6-12 months, inconsistent)</option>
+          <option value="Intermediate">Intermediate (1-2 years)</option>
+          <option value="Advanced">Advanced (4+ years)</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Gym Access</label>
+        <select [(ngModel)]="answers.gymAccess">
+          <option value="">Select</option>
+          <option value="Full gym">
+            Full gym (barbells, dumbbells, cables)
+          </option>
+          <option value="Decent gym">Decent gym (no barbell)</option>
+          <option value="Home gym">Home gym (dumbbells only)</option>
+          <option value="Bodyweight">Bodyweight only</option>
+        </select>
+      </div>
+      <div class="grid-2">
+        <div class="field-group">
+          <label>Days Per Week</label>
+          <select [(ngModel)]="answers.daysPerWeek">
+            <option [value]="3">3 days</option>
+            <option [value]="4">4 days</option>
+            <option [value]="5">5 days</option>
+            <option [value]="6">6 days</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Session Duration</label>
+          <select [(ngModel)]="answers.sessionDuration">
+            <option value="45 minutes">45 min</option>
+            <option value="60 minutes">60 min</option>
+            <option value="75-90 minutes">75-90 min</option>
+            <option value="2+ hours">2+ hours</option>
           </select>
         </div>
       </div>
-    }
+      <div class="field-group">
+        <label>Preferred Training Time</label>
+        <select [(ngModel)]="answers.preferredTrainTime">
+          <option value="Morning">Morning (6-9am)</option>
+          <option value="Afternoon">Afternoon (12-3pm)</option>
+          <option value="Evening">Evening (4-7pm)</option>
+          <option value="Night">Night (7-10pm)</option>
+        </select>
+      </div>
+    </div>
+  }
 
-    <!-- STEP 6 — Generating Plan -->
-    @if (currentStep() === 6) {
-      <div class="text-center py-12 animate-fade-up">
-        @if (isGenerating()) {
-          <div class="mb-6">
-            <div class="text-6xl mb-4">🤖</div>
-            <div class="text-2xl font-display tracking-wide text-white mb-2">
-              BUILDING YOUR PLAN
-            </div>
-            <div class="text-sm font-mono text-gray-400">
-              AI is analyzing your profile...
-            </div>
-          </div>
-          <div class="space-y-2">
-            @for (step of generatingSteps; track step; let i = $index) {
-              <div
-                class="flex items-center gap-3 text-sm"
-                [style.opacity]="generatingStep() >= i ? '1' : '0.3'"
-                [style.color]="generatingStep() > i ? '#e8ff47' : '#888'"
-              >
-                <span>{{ generatingStep() > i ? "✓" : "○" }}</span>
-                <span class="font-mono">{{ step }}</span>
-              </div>
-            }
-          </div>
-        } @else if (planReady()) {
-          <div>
-            <div class="text-6xl mb-4">🔥</div>
-            <div
-              class="text-3xl font-display tracking-wide mb-2"
-              style="color: #e8ff47"
+  <!-- STEP 4 -->
+  @if (currentStep() === 4) {
+    <div class="step-content animate-fade-up">
+      <div class="step-title">NUTRITION</div>
+      <div class="field-group">
+        <label>Diet Type</label>
+        <select [(ngModel)]="answers.dietType">
+          <option value="">Select</option>
+          <option value="Non-vegetarian">
+            Non-vegetarian (eat everything)
+          </option>
+          <option value="Vegetarian">Vegetarian (no meat)</option>
+          <option value="Eggetarian">Eggetarian</option>
+          <option value="Vegan">Vegan</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Food Preference</label>
+        <select [(ngModel)]="answers.foodPreference">
+          <option value="Indian">Primarily Indian food</option>
+          <option value="Mix">Mix of Indian and non-Indian</option>
+          <option value="Non-Indian">Primarily non-Indian</option>
+          <option value="No preference">No preference</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Appetite</label>
+        <select [(ngModel)]="answers.appetite">
+          <option value="Small">Small (struggle to eat enough)</option>
+          <option value="Moderate">Moderate (eat reasonably well)</option>
+          <option value="Good">Good appetite</option>
+          <option value="Very high">Very high appetite</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Supplements (select all)</label>
+        <div class="checkbox-grid">
+          @for (s of supplementOptions; track s) {
+            <button
+              type="button"
+              class="checkbox-btn"
+              [class.selected]="answers.supplements.includes(s)"
+              (click)="toggleArray(answers.supplements, s)"
             >
-              PLAN READY
-            </div>
-            <div class="text-sm text-gray-400 mb-8">
-              Your personalized 100-day transformation plan is ready.
-            </div>
-            <button class="btn-primary w-full" (click)="goToDashboard()">
-              START DAY 1 →
+              {{ s }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Protein Powder -->
+      <div class="field-group">
+        <label>Protein Powder</label>
+        <div class="checkbox-grid" style="grid-template-columns: 1fr 1fr">
+          <button
+            type="button"
+            class="checkbox-btn"
+            [class.selected]="answers.usesProteinPowder === true"
+            (click)="answers.usesProteinPowder = true"
+          >
+            ✅ I use it
+          </button>
+          <button
+            type="button"
+            class="checkbox-btn"
+            [class.selected]="
+              answers.usesProteinPowder === false &&
+              answers.proteinPowderType === 'none'
+            "
+            (click)="
+              answers.usesProteinPowder = false;
+              answers.proteinPowderType = 'none'
+            "
+          >
+            ❌ I don't use it
+          </button>
+        </div>
+      </div>
+
+      @if (answers.usesProteinPowder) {
+        <div class="field-group">
+          <label>Which type are you using?</label>
+          <select [(ngModel)]="answers.proteinPowderType">
+            <option value="">Select</option>
+            <option value="Whey Concentrate">Whey Concentrate</option>
+            <option value="Whey Isolate">Whey Isolate</option>
+            <option value="Casein">Casein</option>
+            <option value="Plant-based">Plant-based</option>
+            <option value="Not sure">Not sure / Generic brand</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Running low / need to restock?</label>
+          <div class="checkbox-grid" style="grid-template-columns: 1fr 1fr">
+            <button
+              type="button"
+              class="checkbox-btn"
+              [class.selected]="answers.needsProteinRestock === true"
+              (click)="answers.needsProteinRestock = true"
+            >
+              Yes, almost finished
+            </button>
+            <button
+              type="button"
+              class="checkbox-btn"
+              [class.selected]="answers.needsProteinRestock === false"
+              (click)="answers.needsProteinRestock = false"
+            >
+              No, still have enough
             </button>
           </div>
-        } @else if (error()) {
-          <div>
-            <div class="text-6xl mb-4">⚠️</div>
-            <div class="text-xl font-display text-red-400 mb-4">
-              GENERATION FAILED
-            </div>
-            <div class="text-sm text-gray-400 mb-6">{{ error() }}</div>
-            <button class="btn-primary" (click)="generatePlan()">RETRY</button>
-          </div>
-        }
-      </div>
-    }
+        </div>
+      }
 
-    <!-- Navigation -->
-    @if (currentStep() < 6) {
-      <div class="flex gap-3 mt-8">
-        @if (currentStep() > 1) {
-          <button class="btn-ghost flex-1" (click)="prevStep()">← BACK</button>
-        }
-        @if (currentStep() < 5) {
-          <button
-            class="btn-primary flex-1"
-            (click)="nextStep()"
-            [disabled]="!isStepValid()"
+      @if (!answers.usesProteinPowder || answers.needsProteinRestock) {
+        <div class="field-group">
+          <label
+            >Want Claude to recommend the best protein for your goal?</label
           >
-            NEXT →
-          </button>
-        } @else {
-          <button
-            class="btn-primary flex-1"
-            (click)="generatePlan()"
-            [disabled]="!isStepValid()"
-          >
-            GENERATE MY PLAN 🔥
-          </button>
-        }
+          <div class="checkbox-grid" style="grid-template-columns: 1fr 1fr">
+            <button
+              type="button"
+              class="checkbox-btn"
+              [class.selected]="answers.wantsProteinRecommendation === true"
+              (click)="answers.wantsProteinRecommendation = true"
+            >
+              Yes, recommend one
+            </button>
+            <button
+              type="button"
+              class="checkbox-btn"
+              [class.selected]="answers.wantsProteinRecommendation === false"
+              (click)="answers.wantsProteinRecommendation = false"
+            >
+              No thanks
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- STEP 5 -->
+  @if (currentStep() === 5) {
+    <div class="step-content animate-fade-up">
+      <div class="step-title">LIFESTYLE & RECOVERY</div>
+      <div class="field-group">
+        <label>Sleep Hours</label>
+        <select [(ngModel)]="answers.sleepHours">
+          <option value="Under 6 hours">Under 6 hours (poor)</option>
+          <option value="6-7 hours">6-7 hours (average)</option>
+          <option value="7-8 hours">7-8 hours (decent)</option>
+          <option value="8+ hours">8+ hours (good)</option>
+        </select>
       </div>
-    }
-  </div>
+      <div class="field-group">
+        <label>Stress Level</label>
+        <select [(ngModel)]="answers.stressLevel">
+          <option value="Low">Low stress</option>
+          <option value="Moderate">Moderate stress</option>
+          <option value="High">High stress</option>
+          <option value="Very high">Very high / burnout</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Injuries / Limitations</label>
+        <div class="checkbox-grid">
+          @for (inj of injuryOptions; track inj) {
+            <button
+              type="button"
+              class="checkbox-btn"
+              [class.selected]="answers.injuries.includes(inj)"
+              (click)="toggleArray(answers.injuries, inj)"
+            >
+              {{ inj }}
+            </button>
+          }
+        </div>
+        <input
+          type="text"
+          [(ngModel)]="customInjury"
+          placeholder="Any other injuries or limitations..."
+          style="margin-top: 8px"
+        />
+      </div>
+      <div class="field-group">
+        <label>Coaching Style</label>
+        <select [(ngModel)]="answers.coachingStyle">
+          <option value="Strict">Strict (tell me exactly what to do)</option>
+          <option value="Flexible">Structured but flexible</option>
+          <option value="Relaxed">Relaxed guidance</option>
+        </select>
+      </div>
+    </div>
+  }
+
+  <!-- STEP 6 -->
+  @if (currentStep() === 6) {
+    <div
+      class="step-content animate-fade-up"
+      style="text-align: center; padding: 40px 0"
+    >
+      @if (isGenerating()) {
+        <div style="font-size: 48px; margin-bottom: 16px">🤖</div>
+        <div class="step-title">BUILDING YOUR PLAN</div>
+        <div
+          style="
+            font-size: 13px;
+            color: #555;
+            font-family: &quot;DM Mono&quot;, monospace;
+            margin: 8px 0 24px;
+          "
+        >
+          This usually takes 30-60 seconds...
+        </div>
+
+        <!-- Spinner -->
+        <div class="spinner-container">
+          <div class="spinner"></div>
+        </div>
+
+        <div
+          style="
+            font-size: 12px;
+            color: #444;
+            font-family: &quot;DM Mono&quot;, monospace;
+            margin-top: 24px;
+          "
+        >
+          AI is analyzing your profile and building<br />a personalized plan
+          just for you
+        </div>
+      } @else if (planReady()) {
+        <div style="font-size: 48px; margin-bottom: 16px">🔥</div>
+        <div class="step-title" style="color: #e8ff47">PLAN READY</div>
+        <div
+          style="
+            font-size: 13px;
+            color: #555;
+            font-family: &quot;DM Mono&quot;, monospace;
+            margin: 12px 0 24px;
+          "
+        >
+          Your personalized 100-day plan is ready.
+        </div>
+        <button
+          class="btn-primary"
+          style="width: 100%"
+          (click)="goToDashboard()"
+        >
+          START DAY 1 →
+        </button>
+      } @else if (error()) {
+        <div style="font-size: 48px; margin-bottom: 16px">⚠️</div>
+        <div class="step-title" style="color: #f87171">GENERATION FAILED</div>
+        <div style="font-size: 13px; color: #555; margin: 12px 0 24px">
+          {{ error() }}
+        </div>
+        <button class="btn-primary" (click)="generatePlan()">RETRY</button>
+      }
+    </div>
+  }
+
+  <!-- Navigation -->
+  @if (currentStep() < 6) {
+    <div class="nav-buttons">
+      @if (currentStep() > 1) {
+        <button class="btn-ghost" style="flex: 1" (click)="prevStep()">
+          ← BACK
+        </button>
+      }
+      @if (currentStep() < 5) {
+        <button
+          class="btn-primary"
+          style="flex: 1"
+          (click)="nextStep()"
+          [disabled]="!isStepValid()"
+        >
+          NEXT →
+        </button>
+      } @else {
+        <button
+          class="btn-primary"
+          style="flex: 1"
+          (click)="generatePlan()"
+          [disabled]="!isStepValid()"
+        >
+          GENERATE MY PLAN 🔥
+        </button>
+      }
+    </div>
+  }
 </div>

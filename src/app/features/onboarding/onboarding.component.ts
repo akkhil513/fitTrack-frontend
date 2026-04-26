@@ -117,6 +117,10 @@ export class OnboardingComponent {
     trackingPreference: "Simple meal structure",
     preferredTrainTime: "Evening",
     stressLevel: "Moderate",
+    usesProteinPowder: false,
+    proteinPowderType: "",
+    needsProteinRestock: false,
+    wantsProteinRecommendation: false,
   };
 
   constructor(
@@ -170,24 +174,16 @@ export class OnboardingComponent {
     this.currentStep.update((s) => s - 1);
   }
 
-  async generatePlan() {
+  generatePlan() {
     this.currentStep.set(6);
     this.isGenerating.set(true);
     this.error.set("");
 
-    // Simulate step progress
-    for (let i = 0; i < this.generatingSteps.length; i++) {
-      await new Promise((r) => setTimeout(r, 800));
-      this.generatingStep.set(i + 1);
-    }
-
-    // Convert numbers to strings for backend
     const payload = {
       ...this.answers,
       age: String(this.answers.age),
       weight: String(this.answers.weight),
       daysPerWeek: String(this.answers.daysPerWeek),
-      userId: this.auth.currentUser()?.userId || "",
       primaryGoal:
         this.answers.primaryGoal === "custom"
           ? this.customGoal
@@ -196,21 +192,58 @@ export class OnboardingComponent {
         ...this.answers.injuries,
         ...(this.customInjury ? [this.customInjury] : []),
       ],
+      userId: this.auth.currentUser()?.userId || "",
     };
 
     this.api.generatePlan(payload as any).subscribe({
-      next: () => {
-        this.isGenerating.set(false);
-        this.planReady.set(true);
-      },
-      error: (err) => {
-        this.isGenerating.set(false);
-        this.error.set("Failed to generate plan. Please try again.");
+      next: () => this.pollForPlan(),
+      error: () => {
+        // 503 - Lambda running, start polling
+        this.pollForPlan();
       },
     });
   }
 
+  pollForPlan() {
+    let attempts = 0;
+    const maxAttempts = 25;
+
+    const interval = setInterval(() => {
+      attempts++;
+      if (attempts > maxAttempts) {
+        clearInterval(interval);
+        this.isGenerating.set(false);
+        this.error.set("Plan generation timed out. Please retry.");
+        return;
+      }
+
+      this.api.getPlan().subscribe({
+        next: (plan: any) => {
+          console.log("Poll:", attempts, plan.status);
+          if (
+            plan.status === "READY" &&
+            plan.strategy &&
+            plan.strategy.trim().length > 5
+          ) {
+            clearInterval(interval);
+            this.isGenerating.set(false);
+            this.planReady.set(true);
+          }
+          // else keep polling
+        },
+        error: (err) => {
+          // 404 = plan deleted, still generating - keep polling
+          console.log("Poll error:", err.status, "attempt:", attempts);
+        },
+      });
+    }, 5000);
+  }
+
   goToDashboard() {
     this.router.navigate(["/dashboard"]);
+  }
+
+  cancel() {
+    this.router.navigate(["/dashboard/profile"]);
   }
 }

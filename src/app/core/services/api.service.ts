@@ -29,6 +29,10 @@ export interface OnboardingAnswers {
   trackingPreference: string;
   preferredTrainTime: string;
   stressLevel: string;
+  usesProteinPowder: boolean;
+  proteinPowderType: string;
+  needsProteinRestock: boolean;
+  wantsProteinRecommendation: boolean;
 }
 
 export interface FitPlan {
@@ -92,8 +96,8 @@ export class ApiService {
   ) {}
 
   // ── PLAN ──
-  generatePlan(answers: OnboardingAnswers): Observable<FitPlan> {
-    return this.http.post<FitPlan>(`${this.base}/plans/generate`, answers);
+  generatePlan(payload: any): Observable<any> {
+    return this.http.post(`${this.base}/plans/generate`, payload);
   }
 
   getPlan(): Observable<FitPlan> {

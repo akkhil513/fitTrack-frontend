@@ -95,10 +95,8 @@
         <div class="plan-card strategy-card">
           <div class="plan-label">🎯 STRATEGY</div>
           <ul class="plan-bullets">
-            @for (point of plan().strategy.split("."); track $index) {
-              @if (point.trim()) {
-                <li>{{ point.trim() }}</li>
-              }
+            @for (point of splitIntoBullets(plan().strategy); track $index) {
+              <li>{{ point }}</li>
             }
           </ul>
         </div>
@@ -144,10 +142,8 @@
         <div class="plan-card nutrition-card">
           <div class="plan-label">🥩 NUTRITION</div>
           <ul class="plan-bullets">
-            @for (point of plan().nutrition.split("."); track $index) {
-              @if (point.trim()) {
-                <li>{{ point.trim() }}</li>
-              }
+            @for (point of splitIntoBullets(plan().nutrition); track $index) {
+              <li>{{ point }}</li>
             }
           </ul>
         </div>
@@ -155,10 +151,8 @@
         <div class="plan-card supplements-card">
           <div class="plan-label">💊 SUPPLEMENTS</div>
           <ul class="plan-bullets">
-            @for (point of plan().supplements.split("."); track $index) {
-              @if (point.trim()) {
-                <li>{{ point.trim() }}</li>
-              }
+            @for (point of splitIntoBullets(plan().supplements); track $index) {
+              <li>{{ point }}</li>
             }
           </ul>
         </div>
@@ -166,10 +160,8 @@
         <div class="plan-card recovery-card">
           <div class="plan-label">😴 RECOVERY</div>
           <ul class="plan-bullets">
-            @for (point of plan().recovery.split("."); track $index) {
-              @if (point.trim()) {
-                <li>{{ point.trim() }}</li>
-              }
+            @for (point of splitIntoBullets(plan().recovery); track $index) {
+              <li>{{ point }}</li>
             }
           </ul>
         </div>

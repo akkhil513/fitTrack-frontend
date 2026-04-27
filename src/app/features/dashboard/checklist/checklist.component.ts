@@ -25,6 +25,7 @@ export class ChecklistComponent implements OnInit, OnDestroy {
   savedMsg = signal("");
   todayKey = new Date().toISOString().split("T")[0];
   private savedTimeoutId: ReturnType<typeof setTimeout> | null = null;
+  planLoaded = signal(false);
 
   groups = [
     { key: "meal", label: "Meals", icon: "🍽" },
@@ -34,7 +35,8 @@ export class ChecklistComponent implements OnInit, OnDestroy {
     { key: "recovery", label: "Recovery", icon: "😴" },
   ];
 
-  items: CheckItem[] = [
+  // Default fallback items
+  defaultItems: CheckItem[] = [
     {
       id: "meal1",
       group: "meal",
@@ -165,6 +167,8 @@ export class ChecklistComponent implements OnInit, OnDestroy {
     },
   ];
 
+  items = signal<CheckItem[]>(this.defaultItems);
+
   motivations = [
     "Every rep today is a vote for who you want to become.",
     "The belly doesn't vanish overnight. But it vanishes with days like today.",
@@ -182,7 +186,7 @@ export class ChecklistComponent implements OnInit, OnDestroy {
     () => Object.values(this.checked()).filter(Boolean).length,
   );
   scorePct = computed(() =>
-    Math.round((this.doneCount() / this.items.length) * 100),
+    Math.round((this.doneCount() / this.items().length) * 100),
   );
   scoreMessage = computed(() => {
     const pct = this.scorePct();
@@ -202,49 +206,76 @@ export class ChecklistComponent implements OnInit, OnDestroy {
     this.motivation.set(
       this.motivations[Math.floor(Math.random() * this.motivations.length)],
     );
+    this.loadPlanChecklist();
+  }
 
+  loadPlanChecklist() {
+    this.api.getPlan().subscribe({
+      next: (plan: any) => {
+        if (plan.dailyChecklist && plan.dailyChecklist.trim() !== " ") {
+          try {
+            const planItems = JSON.parse(plan.dailyChecklist);
+            if (Array.isArray(planItems) && planItems.length > 0) {
+              const mapped: CheckItem[] = planItems.map((item: any, i: number) => ({
+                id: item.id || `plan_${i}`,
+                group: this.mapCategory(item.category),
+                name: item.label,
+                time: item.time || "",
+                tag: item.category || "supp",
+                tagLabel: item.category?.toUpperCase().substring(0, 5) || "TASK",
+              }));
+              this.items.set(mapped);
+            }
+          } catch {
+            // keep default items
+          }
+        }
+        this.planLoaded.set(true);
+        this.loadTodayChecklist();
+      },
+      error: () => {
+        this.planLoaded.set(true);
+        this.loadTodayChecklist();
+      },
+    });
+  }
+
+  mapCategory(category: string): "meal" | "supp" | "train" | "water" | "recovery" {
+    switch (category) {
+      case "supplement":
+        return "supp";
+      case "nutrition":
+        return "meal";
+      case "training":
+        return "train";
+      case "recovery":
+        return "recovery";
+      default:
+        return "supp";
+    }
+  }
+
+  loadTodayChecklist() {
     this.api.getLogByDate(this.todayKey).subscribe({
       next: (log: any) => {
         if (log.checklist && log.checklist.trim() !== " ") {
           try {
             const saved = JSON.parse(log.checklist);
-
             const checked: Record<string, boolean> = {};
-            this.items.forEach((item) => {
-              checked[item.id] = saved[item.name] || false;
+            this.items().forEach((item) => {
+              checked[item.id] = saved[item.name] || saved[item.id] || false;
             });
             this.checked.set(checked);
           } catch {}
         } else {
-          // Fallback to localStorage
-          const saved = localStorage.getItem("checked_" + this.todayKey);
+          const saved = localStorage.getItem(this.storageKey);
           if (saved) this.checked.set(JSON.parse(saved));
         }
       },
       error: () => {
-        // Fallback to localStorage
-        const saved = localStorage.getItem("checked_" + this.todayKey);
+        const saved = localStorage.getItem(this.storageKey);
         if (saved) this.checked.set(JSON.parse(saved));
       },
-    });
-
-    const saved = localStorage.getItem(this.storageKey);
-    if (saved) {
-      try {
-        this.checked.set(JSON.parse(saved));
-      } catch {
-        localStorage.removeItem(this.storageKey);
-      }
-    }
-
-    this.api.getLogByDate(this.todayKey).subscribe({
-      next: (log) => {
-        if (log?.checklist) {
-          this.checked.set(log.checklist);
-          localStorage.setItem(this.storageKey, JSON.stringify(log.checklist));
-        }
-      },
-      error: () => {},
     });
   }
 
@@ -255,7 +286,7 @@ export class ChecklistComponent implements OnInit, OnDestroy {
   }
 
   getGroupItems(group: string): CheckItem[] {
-    return this.items.filter((i) => i.group === group);
+    return this.items().filter((i) => i.group === group);
   }
 
   toggle(id: string) {
@@ -270,7 +301,7 @@ export class ChecklistComponent implements OnInit, OnDestroy {
     const userId = this.auth.currentUser()?.userId || "";
 
     const labeledChecklist: Record<string, boolean> = {};
-    this.items.forEach((item) => {
+    this.items().forEach((item) => {
       labeledChecklist[item.name] = this.checked()[item.id] || false;
     });
 

@@ -1,11 +1,9 @@
 <div class="page" style="padding-bottom: 120px">
-  <!-- Motivation -->
   <div class="motivation">{{ motivation() }}</div>
 
-  <!-- Score -->
   <div class="score-card">
     <div class="score-num">
-      {{ doneCount() }}<span>/{{ items.length }}</span>
+      {{ doneCount() }}<span>/{{ items().length }}</span>
     </div>
     <div class="score-right">
       <div class="score-title">Daily Score</div>
@@ -16,33 +14,52 @@
     </div>
   </div>
 
-  <!-- Groups -->
-  @for (group of groups; track group.key) {
-    <div class="group">
-      <div class="group-label">{{ group.icon }} {{ group.label }}</div>
-      @for (item of getGroupItems(group.key); track item.id) {
-        <div
-          class="check-item"
-          [class.done]="checked()[item.id]"
-          (click)="toggle(item.id)"
-        >
-          <div class="check-box">{{ checked()[item.id] ? "✓" : "" }}</div>
-          <div class="check-info">
-            <div class="check-name">{{ item.name }}</div>
-            <div class="check-time">{{ item.time }}</div>
-          </div>
-          <div class="tag" [ngClass]="item.tag">{{ item.tagLabel }}</div>
+  @if (!planLoaded()) {
+    <div
+      style="
+        text-align: center;
+        padding: 40px;
+        color: #555;
+        font-family: 'DM Mono', monospace;
+        font-size: 12px;
+      "
+    >
+      Loading your plan...
+    </div>
+  } @else {
+    @for (group of groups; track group.key) {
+      @if (getGroupItems(group.key).length > 0) {
+        <div class="group">
+          <div class="group-label">{{ group.icon }} {{ group.label }}</div>
+          @for (item of getGroupItems(group.key); track item.id) {
+            <div
+              class="check-item"
+              [class.done]="checked()[item.id]"
+              (click)="toggle(item.id)"
+            >
+              <div class="check-box">{{ checked()[item.id] ? "✓" : "" }}</div>
+              <div class="check-info">
+                <div class="check-name">{{ item.name }}</div>
+                <div class="check-time">{{ item.time }}</div>
+              </div>
+              <div class="tag" [ngClass]="item.tag">{{ item.tagLabel }}</div>
+            </div>
+          }
         </div>
       }
+    }
+
+    <div style="padding: 16px">
+      @if (savedMsg()) {
+        <div class="success-msg">{{ savedMsg() }}</div>
+      }
+      <button
+        class="btn-primary"
+        (click)="saveChecklist()"
+        [disabled]="saving()"
+      >
+        {{ saving() ? "SAVING..." : "SAVE CHECKLIST" }}
+      </button>
     </div>
   }
-
-  <div style="padding: 16px">
-    @if (savedMsg()) {
-      <div class="success-msg">{{ savedMsg() }}</div>
-    }
-    <button class="btn-primary" (click)="saveChecklist()" [disabled]="saving()">
-      {{ saving() ? "SAVING..." : "SAVE CHECKLIST" }}
-    </button>
-  </div>
 </div>

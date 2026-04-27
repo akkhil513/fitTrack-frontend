@@ -47,12 +47,8 @@
           </select>
         </div>
         <div class="field-group">
-          <label>Height</label>
-          <input
-            type="text"
-            [(ngModel)]="answers.height"
-            placeholder="5'8&quot;"
-          />
+          <label>Height (feet)</label>
+          <input type="text" [(ngModel)]="answers.height" placeholder="5.8" />
         </div>
         <div class="field-group">
           <label>Weight (kg)</label>
@@ -248,9 +244,9 @@
       <div class="field-group">
         <label>Food Preference</label>
         <select [(ngModel)]="answers.foodPreference">
-          <option value="Indian">Primarily Indian food</option>
-          <option value="Mix">Mix of Indian and non-Indian</option>
-          <option value="Non-Indian">Primarily non-Indian</option>
+          <option value="Asian">Primarily Asian food</option>
+          <option value="Mix">Mix of Asian and non-Asian</option>
+          <option value="Non-Asian">Primarily non-Asian</option>
           <option value="No preference">No preference</option>
         </select>
       </div>

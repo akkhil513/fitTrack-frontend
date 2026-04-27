@@ -4,7 +4,21 @@
   } @else {
     <!-- Header — editable -->
     <div class="profile-header">
-      <div class="avatar">{{ user()?.firstName?.charAt(0) || "A" }}</div>
+      <div class="avatar-wrapper">
+        @if (photoUrl() && photoUrl().trim().length > 5) {
+          <img class="avatar-img" [src]="photoUrl()" alt="Profile" />
+        } @else {
+          <div class="avatar">{{ user()?.firstName?.charAt(0) || 'A' }}</div>
+        }
+        <label class="avatar-edit" title="Change photo">
+          <input type="file" accept="image/*" (change)="onPhotoSelect($event)" style="display:none" />
+          @if (uploadingPhoto()) {
+            ⏳
+          } @else {
+            📷
+          }
+        </label>
+      </div>
       <div class="profile-info" style="flex: 1">
         <div class="card-title" style="margin-bottom: 12px">PERSONAL INFO</div>
         <div class="field-group" style="margin-bottom: 6px">

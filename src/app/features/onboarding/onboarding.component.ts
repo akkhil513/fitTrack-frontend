@@ -179,10 +179,17 @@ export class OnboardingComponent {
     this.isGenerating.set(true);
     this.error.set("");
 
+    const heightValue = this.answers.height?.trim() || "";
+    const payloadHeight = /feet$/i.test(heightValue)
+      ? heightValue
+      : `${heightValue} feet`;
+    const payloadWeight = `${this.answers.weight} kgs`;
+
     const payload = {
       ...this.answers,
       age: String(this.answers.age),
-      weight: String(this.answers.weight),
+      height: payloadHeight,
+      weight: payloadWeight,
       daysPerWeek: String(this.answers.daysPerWeek),
       primaryGoal:
         this.answers.primaryGoal === "custom"

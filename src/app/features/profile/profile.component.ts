@@ -19,6 +19,8 @@ export class ProfileComponent implements OnInit {
   savedMsg = signal("");
   measurementSavedMsg = signal("");
   activeSection = signal<"plan" | "stats">("plan");
+  photoUrl = signal<string>('');
+  uploadingPhoto = signal(false);
 
   user = signal<any>(null);
   editName = "";
@@ -74,6 +76,11 @@ export class ProfileComponent implements OnInit {
           try {
             this.measurementHistory.set(JSON.parse(user.measurementHistory));
           } catch {}
+        }
+
+        // Load photoUrl
+        if (user.photoUrl && user.photoUrl.trim() !== ' ') {
+          this.photoUrl.set(user.photoUrl);
         }
 
         this.loading.set(false);
@@ -191,5 +198,33 @@ export class ProfileComponent implements OnInit {
       .split(/\.(?!\d)(?:\s+|\n)/)
       .map((s) => s.trim())
       .filter((s) => s.length > 3);
+  }
+
+  onPhotoSelect(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+
+    // Validate size — max 2MB
+    if (file.size > 2 * 1024 * 1024) {
+      alert('Photo must be under 2MB');
+      return;
+    }
+
+    this.uploadingPhoto.set(true);
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64 = reader.result as string;
+      const userId = this.auth.currentUser()?.userId || '';
+      this.api.uploadPhoto(userId, base64, file.type).subscribe({
+        next: (res: any) => {
+          this.photoUrl.set(res.photoUrl);
+          this.uploadingPhoto.set(false);
+        },
+        error: () => {
+          this.uploadingPhoto.set(false);
+        },
+      });
+    };
+    reader.readAsDataURL(file);
   }
 }

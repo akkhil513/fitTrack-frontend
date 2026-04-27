@@ -17,19 +17,56 @@
   border-radius: 12px;
 }
 
+.avatar-wrapper {
+  position: relative;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+}
+
 .avatar {
-  width: 44px;
-  height: 44px;
+  width: 52px;
+  height: 52px;
   background: #e8ff47;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: "Bebas Neue", sans-serif;
-  font-size: 22px;
+  font-size: 24px;
   color: #000;
   flex-shrink: 0;
-  margin-top: 4px;
+}
+
+.avatar-img {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e8ff47;
+  display: block;
+}
+
+.avatar-edit {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 22px;
+  height: 22px;
+  background: #e8ff47;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  cursor: pointer;
+  border: 2px solid #0a0a0a;
+  z-index: 1;
+}
+
+.avatar-edit.uploading {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .profile-name {

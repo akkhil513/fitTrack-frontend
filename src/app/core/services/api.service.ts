@@ -188,6 +188,14 @@ export class ApiService {
     });
   }
 
+  uploadPhoto(userId: string, base64Image: string, contentType: string): Observable<any> {
+    return this.http.post(`${this.base}/users/photo/upload`, {
+      userId,
+      base64Image,
+      contentType,
+    });
+  }
+
   private getCurrentUserId(): string {
     // Extract userId from JWT token in localStorage
     const keys = Object.keys(localStorage);

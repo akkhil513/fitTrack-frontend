@@ -366,7 +366,7 @@ export class LogComponent implements OnInit {
     private api: ApiService,
     private auth: AuthService,
     private exerciseService: ExerciseService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadLogs();
@@ -419,7 +419,7 @@ export class LogComponent implements OnInit {
               this.planSessions[day] = training[day].session;
             }
           });
-        } catch {}
+        } catch { }
         this.onDateChange();
       },
       error: () => this.onDateChange(),
@@ -522,6 +522,7 @@ export class LogComponent implements OnInit {
       updated[exIndex] = { ...updated[exIndex], sets };
       return updated;
     });
+    this.autoSaveWorkout();
   }
 
   toggleCalc(index: number) {
@@ -572,6 +573,44 @@ export class LogComponent implements OnInit {
     return ex.sets.filter((s) => s.done).length;
   }
 
+  getExerciseType(name: string): "weighted" | "bodyweight" | "timed" | "cardio" {
+    const normalizedName = name.toLowerCase();
+    if (
+      normalizedName.includes("plank") ||
+      normalizedName.includes("hold") ||
+      normalizedName.includes("dead hang") ||
+      normalizedName.includes("wall sit")
+    ) {
+      return "timed";
+    }
+    if (
+      normalizedName.includes("walk") ||
+      normalizedName.includes("cycling") ||
+      normalizedName.includes("cardio") ||
+      normalizedName.includes("hiit") ||
+      normalizedName.includes("treadmill") ||
+      normalizedName.includes("bike") ||
+      normalizedName.includes("incline walk")
+    ) {
+      return "cardio";
+    }
+    if (
+      normalizedName.includes("pull-up") ||
+      normalizedName.includes("pullup") ||
+      normalizedName.includes("chin-up") ||
+      normalizedName.includes("dip") ||
+      normalizedName.includes("push-up") ||
+      normalizedName.includes("pushup") ||
+      normalizedName.includes("leg raise") ||
+      normalizedName.includes("knee raise") ||
+      normalizedName.includes("rollout") ||
+      normalizedName.includes("hanging")
+    ) {
+      return "bodyweight";
+    }
+    return "weighted";
+  }
+
   onExerciseChange(ex: ExerciseRow, index: number) {
     if (ex.name === "other") {
       ex.name = "";
@@ -615,7 +654,7 @@ export class LogComponent implements OnInit {
   loadLogs() {
     this.api
       .getLogs()
-      .subscribe({ next: (logs) => this.pastLogs.set(logs), error: () => {} });
+      .subscribe({ next: (logs) => this.pastLogs.set(logs), error: () => { } });
   }
 
   loadMealTemplates() {
@@ -799,6 +838,38 @@ export class LogComponent implements OnInit {
     });
   }
 
+  autoSaveWorkout() {
+    const userId = this.auth.currentUser()?.userId || "";
+    const exercisesJson = JSON.stringify(
+      this.exercises()
+        .filter((e) => e.name && e.sets.some((s) => s.reps && s.weight))
+        .map((e) => ({
+          name: e.name,
+          weightType: e.weightType,
+          sets: e.sets
+            .filter((s) => s.reps && s.weight)
+            .map((s, i) => ({
+              setNumber: i + 1,
+              reps: s.reps,
+              weight: s.weight,
+              unit: "lbs",
+              weightType: e.weightType,
+            })),
+        })),
+    );
+    const log: DailyLog = {
+      userId,
+      date: this.logDate,
+      dayNumber: this.getDayNumber(),
+      workout: {
+        session: this.workout.session,
+        exercises: exercisesJson,
+        notes: this.workout.notes,
+      },
+    };
+    this.api.saveLog(log).subscribe({ next: () => {}, error: () => {} });
+  }
+
   saveNutrition() {
     this.saving.set(true);
     const userId = this.auth.currentUser()?.userId || "";
@@ -964,15 +1035,7 @@ export class LogComponent implements OnInit {
 
   onDateChange() {
     const date = new Date(this.logDate + "T00:00:00");
-    const days = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const dayName = days[date.getDay()];
     const sessionMap: Record<string, string> = {
       Monday: "Push A — Chest/Shoulders/Triceps",
@@ -983,39 +1046,51 @@ export class LogComponent implements OnInit {
       Saturday: "Active Recovery",
       Sunday: "Rest Day",
     };
+
     this.api.getLogByDate(this.logDate).subscribe({
       next: (log: any) => {
         this.workout.session = log.session || sessionMap[dayName] || "";
         this.workout.notes = log.notes?.trim() || "";
-        if (
-          log.exercises &&
-          log.exercises.trim() &&
-          log.exercises.trim() !== " "
-        ) {
+
+        // Always load full plan exercises for today
+        const fullPlanExercises = this.planExercises[dayName]?.length
+          ? this.planExercises[dayName]
+          : workoutExercises[dayName] || [];
+        this.todayExerciseList.set(fullPlanExercises);
+
+        if (log.exercises && log.exercises.trim() && log.exercises.trim() !== ' ') {
           try {
             const parsed = JSON.parse(log.exercises);
-            this.exercises.set(
-              parsed.map((ex: any, i: number) => ({
-                name: ex.name,
-                expanded: i === 0,
-                weightType: ex.weightType || "total",
-                showCalc: false,
-                barWeight: 45,
-                plateEachSide: 0,
-                sets: ex.sets.map((s: any) => ({
-                  reps: String(s.reps),
-                  weight: String(s.weight),
-                  done: false,
-                })),
-              })),
-            );
-            this.todayExerciseList.set(parsed.map((ex: any) => ex.name));
+
+            // Load exactly what user logged — don't remap to plan names
+            this.exercises.set(parsed.map((ex: any, i: number) => ({
+              name: ex.name,
+              expanded: i === 0,
+              weightType: ex.weightType || 'total',
+              showCalc: false,
+              barWeight: 45,
+              plateEachSide: 0,
+              sets: ex.sets.map((s: any) => ({
+                reps: String(s.reps),
+                weight: String(s.weight),
+                done: true
+              }))
+            })));
+
+            // Dropdown = saved names + plan exercises (union, no duplicates)
+            const planExercises = this.planExercises[dayName]?.length
+              ? this.planExercises[dayName]
+              : workoutExercises[dayName] || [];
+            const savedNames = parsed.map((ex: any) => ex.name);
+            this.todayExerciseList.set([...new Set([...savedNames, ...planExercises])]);
+
           } catch {
             this.loadDefaultExercises(dayName, sessionMap);
           }
         } else {
           this.loadDefaultExercises(dayName, sessionMap);
         }
+
         if (log.protein && log.protein.trim() !== " ") {
           this.nutrition.protein = parseFloat(log.protein) || 0;
           this.nutrition.calories = parseFloat(log.calories) || 0;
@@ -1024,10 +1099,23 @@ export class LogComponent implements OnInit {
         } else {
           this.nutrition = { protein: 0, calories: 0, water: 0, sleep: 0 };
         }
+
+        // After loading nutrition from DB
+        if (log.foodEntries && log.foodEntries.trim() !== " ") {
+          try {
+            const entries = JSON.parse(log.foodEntries);
+            this.foodEntries.set(entries);
+          } catch {
+            this.foodEntries.set([]);
+          }
+        } else {
+          this.foodEntries.set([]);
+        }
       },
       error: () => {
         this.loadDefaultExercises(dayName, sessionMap);
         this.nutrition = { protein: 0, calories: 0, water: 0, sleep: 0 };
+        this.foodEntries.set([]);
       },
     });
   }
@@ -1043,6 +1131,7 @@ export class LogComponent implements OnInit {
     );
     this.nutrition.protein = Math.round(totals.protein);
     this.nutrition.calories = Math.round(totals.calories);
+    this.autoSaveFoodEntries(); // auto-save to DB
   }
 
   removeFoodEntry(index: number) {
@@ -1056,5 +1145,21 @@ export class LogComponent implements OnInit {
     );
     this.nutrition.protein = Math.round(totals.protein);
     this.nutrition.calories = Math.round(totals.calories);
+    this.autoSaveFoodEntries(); // auto-save to DB
+  }
+
+  autoSaveFoodEntries() {
+    const userId = this.auth.currentUser()?.userId || "";
+    const log: any = {
+      userId,
+      date: this.logDate,
+      dayNumber: this.getDayNumber(),
+      protein: String(this.nutrition.protein),
+      calories: String(this.nutrition.calories),
+      water: String(this.nutrition.water),
+      sleep: String(this.nutrition.sleep),
+      foodEntries: JSON.stringify(this.foodEntries()),
+    };
+    this.api.saveLog(log).subscribe({ next: () => {}, error: () => {} });
   }
 }

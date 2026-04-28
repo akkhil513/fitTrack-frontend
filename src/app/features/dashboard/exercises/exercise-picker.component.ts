@@ -41,7 +41,7 @@ export class ExercisePickerComponent {
     if (!this.searchQuery.trim()) return;
     this.loading.set(true);
     this.selectedBodyPart.set("");
-    this.exerciseService.search(this.searchQuery, 15).subscribe({
+    this.exerciseService.search(this.searchQuery, 50).subscribe({
       next: (exercises) => {
         this.results.set(exercises);
         this.loading.set(false);
@@ -54,7 +54,7 @@ export class ExercisePickerComponent {
     this.selectedBodyPart.set(part);
     this.searchQuery = "";
     this.loading.set(true);
-    this.exerciseService.getByBodyPart(part, 20).subscribe({
+    this.exerciseService.getByBodyPart(part, 50).subscribe({
       next: (exercises) => {
         this.results.set(exercises);
         this.loading.set(false);
@@ -69,6 +69,21 @@ export class ExercisePickerComponent {
 
   pick(ex: Exercise) {
     this.selectExercise.emit(ex);
+    this.close.emit();
+  }
+
+  useCustomName() {
+    const custom: Exercise = {
+      id: 'custom_' + Date.now(),
+      name: this.searchQuery,
+      bodyPart: 'custom',
+      equipment: 'machine',
+      gifUrl: '',
+      target: 'custom',
+      secondaryMuscles: [],
+      instructions: []
+    };
+    this.selectExercise.emit(custom);
     this.close.emit();
   }
 }

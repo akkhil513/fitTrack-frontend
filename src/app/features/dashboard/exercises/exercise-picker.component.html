@@ -52,6 +52,14 @@
       </div>
     </div>
   }
+
+  <!-- Always show manual entry option -->
+  <div class="manual-entry">
+    <div class="manual-label">Can't find what you're looking for?</div>
+    <button class="btn-use-anyway" (click)="useCustomName()">
+      + USE "{{searchQuery || 'custom exercise'}}" AS CUSTOM
+    </button>
+  </div>
 </div>
 
 <!-- Exercise Detail -->

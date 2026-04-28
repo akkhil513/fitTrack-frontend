@@ -28,7 +28,6 @@ export class ChecklistComponent implements OnInit, OnDestroy {
   planLoaded = signal(false);
 
   groups = [
-    { key: "meal", label: "Meals", icon: "🍽" },
     { key: "supp", label: "Supplements", icon: "💊" },
     { key: "train", label: "Training", icon: "💪" },
     { key: "water", label: "Hydration", icon: "💧" },
@@ -38,130 +37,90 @@ export class ChecklistComponent implements OnInit, OnDestroy {
   // Default fallback items
   defaultItems: CheckItem[] = [
     {
-      id: "meal1",
-      group: "meal",
-      name: "Meal 1 — Breakfast",
-      time: "7:00 AM",
-      tag: "meal",
-      tagLabel: "MEAL",
-    },
-    {
-      id: "meal2",
-      group: "meal",
-      name: "Meal 2 — Mid Morning Snack",
-      time: "10:30 AM",
-      tag: "meal",
-      tagLabel: "MEAL",
-    },
-    {
-      id: "meal3",
-      group: "meal",
-      name: "Meal 3 — Lunch",
-      time: "1:00 PM",
-      tag: "meal",
-      tagLabel: "MEAL",
-    },
-    {
-      id: "meal4",
-      group: "meal",
-      name: "Meal 4 — Pre Workout",
-      time: "3:00 PM",
-      tag: "meal",
-      tagLabel: "MEAL",
-    },
-    {
-      id: "meal5",
-      group: "meal",
-      name: "Meal 5 — Post Workout",
-      time: "7:00 PM",
-      tag: "meal",
-      tagLabel: "MEAL",
-    },
-    {
-      id: "meal6",
-      group: "meal",
-      name: "Meal 6 — Dinner",
-      time: "9:00 PM",
-      tag: "meal",
-      tagLabel: "MEAL",
-    },
-    {
       id: "supp1",
       group: "supp",
-      name: "Whey Protein (Pre-workout)",
-      time: "3:00 PM",
+      name: "Whey Protein — post workout",
+      time: "Post-workout",
       tag: "supp",
       tagLabel: "SUPP",
     },
     {
       id: "supp2",
       group: "supp",
-      name: "Whey Protein (Post-workout)",
-      time: "7:00 PM",
+      name: "Creatine 5g",
+      time: "Post-workout",
       tag: "supp",
       tagLabel: "SUPP",
     },
     {
       id: "supp3",
       group: "supp",
-      name: "Creatine 5g",
-      time: "3:00 PM",
+      name: "Vitamin D3",
+      time: "With breakfast",
       tag: "supp",
       tagLabel: "SUPP",
     },
     {
       id: "supp4",
       group: "supp",
-      name: "Vitamin D3",
-      time: "With any meal",
+      name: "Omega-3 Fish Oil",
+      time: "With lunch",
       tag: "supp",
       tagLabel: "SUPP",
     },
     {
+      id: "supp5",
+      group: "supp",
+      name: "Magnesium Glycinate",
+      time: "Before bed",
+      tag: "supp",
+      tagLabel: "SUPP",
+    },
+    {
+      id: "water1",
+      group: "water",
+      name: "Drink 3.5L water",
+      time: "Throughout day",
+      tag: "water",
+      tagLabel: "WATER",
+    },
+    {
       id: "train1",
       group: "train",
-      name: "Gym Session",
-      time: "4:00 PM",
+      name: "Complete today's workout",
+      time: "Evening",
       tag: "train",
       tagLabel: "TRAIN",
     },
     {
       id: "train2",
       group: "train",
-      name: "20 Min Incline Walk",
-      time: "After gym",
+      name: "Log all sets and reps",
+      time: "Post-workout",
       tag: "train",
       tagLabel: "TRAIN",
     },
     {
-      id: "train3",
-      group: "train",
-      name: "Post-workout Stretch",
-      time: "After gym",
-      tag: "train",
-      tagLabel: "TRAIN",
-    },
-    {
-      id: "water1",
-      group: "water",
-      name: "4 Litres Water Today",
-      time: "Throughout day",
-      tag: "water",
-      tagLabel: "WATER",
-    },
-    {
-      id: "core1",
+      id: "recovery1",
       group: "recovery",
-      name: "Core & Posture Routine (5 min)",
-      time: "Any time",
-      tag: "train",
-      tagLabel: "CORE",
+      name: "8000+ steps today",
+      time: "Daily",
+      tag: "recovery",
+      tagLabel: "STEPS",
     },
     {
-      id: "sleep1",
+      id: "recovery2",
       group: "recovery",
-      name: "Sleep by 10:30 PM",
-      time: "10:30 PM",
+      name: "Foam roll 10 min",
+      time: "Evening",
+      tag: "recovery",
+      tagLabel: "RECOV",
+    },
+    {
+      id: "recovery3",
+      group: "recovery",
+      name: "Sleep 7+ hours",
+      time: "Before bed",
       tag: "sleep",
       tagLabel: "SLEEP",
     },
@@ -216,14 +175,16 @@ export class ChecklistComponent implements OnInit, OnDestroy {
           try {
             const planItems = JSON.parse(plan.dailyChecklist);
             if (Array.isArray(planItems) && planItems.length > 0) {
-              const mapped: CheckItem[] = planItems.map((item: any, i: number) => ({
-                id: item.id || `plan_${i}`,
-                group: this.mapCategory(item.category),
-                name: item.label,
-                time: item.time || "",
-                tag: item.category || "supp",
-                tagLabel: item.category?.toUpperCase().substring(0, 5) || "TASK",
-              }));
+              const mapped: CheckItem[] = planItems
+                .filter((item: any) => item.category !== "nutrition")
+                .map((item: any, i: number) => ({
+                  id: item.id || `plan_${i}`,
+                  group: this.mapCategory(item.category),
+                  name: item.label,
+                  time: item.time || "",
+                  tag: item.category || "supp",
+                  tagLabel: item.category?.toUpperCase().substring(0, 5) || "TASK",
+                }));
               this.items.set(mapped);
             }
           } catch {
@@ -244,10 +205,10 @@ export class ChecklistComponent implements OnInit, OnDestroy {
     switch (category) {
       case "supplement":
         return "supp";
-      case "nutrition":
-        return "meal";
       case "training":
         return "train";
+      case "nutrition":
+        return "water";
       case "recovery":
         return "recovery";
       default:

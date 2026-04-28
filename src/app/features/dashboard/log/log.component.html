@@ -173,39 +173,113 @@
 
           <!-- Sets -->
           <div class="sets-header">
-            <span>SET</span>
-            <span
-              >LBS
-              {{ ex.weightType === "perSide" ? "(each)" : "(total)" }}</span
-            >
-            <span>REPS</span>
-            <span></span>
+            @switch (getExerciseType(ex.name)) {
+              @case ('timed') {
+                <span>SET</span><span>DURATION (sec)</span><span></span><span></span>
+              }
+              @case ('cardio') {
+                <span>DURATION (min)</span><span>LEVEL/INCLINE</span><span></span><span></span>
+              }
+              @case ('bodyweight') {
+                <span>SET</span><span>REPS</span><span></span><span></span>
+              }
+              @default {
+                <span>SET</span>
+                <span>LBS {{ ex.weightType === "perSide" ? "(each)" : "(total)" }}</span>
+                <span>REPS</span>
+                <span></span>
+              }
+            }
           </div>
 
           @for (set of ex.sets; track si; let si = $index) {
             <div class="set-row" [class.set-done-row]="set.done">
-              <span class="set-num">{{ si + 1 }}</span>
-              <input
-                [(ngModel)]="set.weight"
-                placeholder="0"
-                type="number"
-                class="set-val"
-                [class.set-val-done]="set.done"
-              />
-              <input
-                [(ngModel)]="set.reps"
-                placeholder="0"
-                type="number"
-                class="set-val"
-                [class.set-val-done]="set.done"
-              />
-              <button
-                class="btn-done"
-                [class.btn-done-active]="set.done"
-                (click)="toggleDone(i, si)"
-              >
-                {{ set.done ? "✓" : "" }}
-              </button>
+              @switch (getExerciseType(ex.name)) {
+                @case ('timed') {
+                  <span class="set-num">{{ si + 1 }}</span>
+                  <input
+                    [(ngModel)]="set.weight"
+                    placeholder="45"
+                    type="number"
+                    class="set-val"
+                    [class.set-val-done]="set.done"
+                  />
+                  <span></span>
+                  <button
+                    class="btn-save-set"
+                    [class.btn-saved]="set.done"
+                    (click)="toggleDone(i, si)"
+                  >
+                    {{ set.done ? "SAVED" : "SAVE" }}
+                  </button>
+                }
+                @case ('cardio') {
+                  <input
+                    [(ngModel)]="set.weight"
+                    placeholder="20"
+                    type="number"
+                    class="set-val"
+                    [class.set-val-done]="set.done"
+                  />
+                  <input
+                    [(ngModel)]="set.reps"
+                    placeholder="12%"
+                    type="text"
+                    class="set-val"
+                    [class.set-val-done]="set.done"
+                  />
+                  <span></span>
+                  <button
+                    class="btn-save-set"
+                    [class.btn-saved]="set.done"
+                    (click)="toggleDone(i, si)"
+                  >
+                    {{ set.done ? "SAVED" : "SAVE" }}
+                  </button>
+                }
+                @case ('bodyweight') {
+                  <span class="set-num">{{ si + 1 }}</span>
+                  <input
+                    [(ngModel)]="set.reps"
+                    placeholder="12"
+                    type="number"
+                    class="set-val"
+                    [class.set-val-done]="set.done"
+                  />
+                  <span></span>
+                  <button
+                    class="btn-save-set"
+                    [class.btn-saved]="set.done"
+                    (click)="toggleDone(i, si)"
+                  >
+                    {{ set.done ? "SAVED" : "SAVE" }}
+                  </button>
+                }
+                @default {
+                  <span class="set-num">{{ si + 1 }}</span>
+                  <input
+                    [(ngModel)]="set.weight"
+                    placeholder="0"
+                    type="number"
+                    class="set-val"
+                    [class.set-val-done]="set.done"
+                  />
+                  <input
+                    [(ngModel)]="set.reps"
+                    placeholder="0"
+                    type="number"
+                    class="set-val"
+                    [class.set-val-done]="set.done"
+                  />
+                  <button
+                    class="btn-save-set"
+                    [class.btn-saved]="set.done"
+                    (click)="toggleDone(i, si)"
+                  >
+                    {{ set.done ? "SAVED" : "SAVE" }}
+                  </button>
+                }
+              }
             </div>
           }
 

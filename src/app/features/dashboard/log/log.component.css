@@ -242,7 +242,7 @@
 /* Sets */
 .sets-header {
   display: grid;
-  grid-template-columns: 28px 1fr 1fr 32px;
+  grid-template-columns: 28px 1fr 1fr 52px;
   gap: 6px;
   padding: 8px 14px 4px;
   font-size: 10px;
@@ -254,7 +254,7 @@
 }
 .set-row {
   display: grid;
-  grid-template-columns: 28px 1fr 1fr 32px;
+  grid-template-columns: 28px 1fr 1fr 52px;
   gap: 6px;
   padding: 5px 14px;
   align-items: center;
@@ -288,21 +288,28 @@
   background: #4ade8010 !important;
   color: #4ade80 !important;
 }
-.btn-done {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 1.5px solid #2a2a2a;
+.btn-save-set {
+  padding: 6px 10px;
+  border-radius: 5px;
+  border: 1px solid #2a2a2a;
   background: transparent;
-  color: transparent;
+  color: #555;
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
   cursor: pointer;
   transition: all 0.2s;
-  font-size: 12px;
+  white-space: nowrap;
 }
-.btn-done-active {
-  background: #4ade80 !important;
+
+.btn-save-set:hover {
+  border-color: #e8ff47;
+  color: #e8ff47;
+}
+
+.btn-saved {
+  background: #4ade8020 !important;
   border-color: #4ade80 !important;
-  color: #000 !important;
+  color: #4ade80 !important;
 }
 .btn-add-set {
   width: 100%;

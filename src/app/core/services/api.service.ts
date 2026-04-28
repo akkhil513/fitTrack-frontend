@@ -93,7 +93,7 @@ export class ApiService {
   constructor(
     private http: HttpClient,
     private auth: AuthService,
-  ) {}
+  ) { }
 
   // ── PLAN ──
   generatePlan(payload: any): Observable<any> {
@@ -154,28 +154,22 @@ export class ApiService {
     return this.http.get(`${this.base}/users/check/${username}`);
   }
 
-  getMealTemplates(): Observable<any[]> {
-    const userId = this.auth.currentUser()?.userId || "";
-    return this.http.get<any[]>(`${this.base}/meals-templates/${userId}`);
-  }
-
-  saveMealTemplate(template: any): Observable<any> {
-    const userId = this.auth.currentUser()?.userId || "";
-    return this.http.post(`${this.base}/meals-templates/${userId}`, {
-      mealTemplates: JSON.stringify(template),
-    });
-  }
-
   saveMealTemplates(templates: any[]): Observable<any> {
-    const userId = this.auth.currentUser()?.userId || "";
-    return this.http.post(`${this.base}/meals-templates/${userId}`, {
-      mealTemplates: JSON.stringify(templates),
+    const userId = this.auth.currentUser()?.userId || '';
+    return this.http.put(`${this.base}/meal-templates/${userId}`, {
+      mealTemplates: JSON.stringify(templates)
     });
+  }
+
+  getMealTemplates(): Observable<any> {
+    const userId = this.auth.currentUser()?.userId || '';
+    return this.http.get(`${this.base}/meal-templates/${userId}`);
   }
 
   calculateMealMacros(description: string): Observable<any> {
     return this.http.post(`${this.base}/nutrition/calculate`, { description });
   }
+  //2 egg whites and 2 whole eggs, 200 ml fairlife 2% reduce fat milk whihc has 11gm protein in it and added once scoop of whey proetein.
 
   updateMeasurementHistory(
     userId: string,

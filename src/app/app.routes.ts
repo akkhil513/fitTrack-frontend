@@ -3,7 +3,17 @@ import { authGuard } from "./core/guards/auth.guard";
 import { onboardingGuard } from "./core/guards/onboarding.guard";
 
 export const routes: Routes = [
-  { path: "", redirectTo: "/dashboard", pathMatch: "full" },
+  {
+    path: "",
+    loadComponent: () =>
+      import("./splash/splash.component").then((m) => m.SplashComponent),
+    pathMatch: "full",
+  },
+  {
+    path: "splash",
+    loadComponent: () =>
+      import("./splash/splash.component").then((m) => m.SplashComponent),
+  },
 
   // Auth routes
   {

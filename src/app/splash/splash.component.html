@@ -1,0 +1,19 @@
+<div class="splash">
+  <div class="splash-content" [class.visible]="step() >= 1">
+    <div class="splash-icon">💪</div>
+    <div class="splash-brand">FITTRACK</div>
+    <div class="splash-tagline" [class.visible]="step() >= 2">
+      100 DAY CHALLENGE
+    </div>
+    <div class="splash-stats" [class.visible]="step() >= 3">
+      <div class="stat">🏋️ TRACK</div>
+      <div class="stat-dot">·</div>
+      <div class="stat">🥩 EAT</div>
+      <div class="stat-dot">·</div>
+      <div class="stat">😴 RECOVER</div>
+    </div>
+    <div class="splash-bar" [class.visible]="step() >= 2">
+      <div class="splash-bar-fill"></div>
+    </div>
+  </div>
+</div>

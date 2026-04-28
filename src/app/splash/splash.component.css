@@ -1,0 +1,112 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400&display=swap");
+
+.splash {
+  min-height: 100vh;
+  background: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.splash-content {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
+}
+
+.splash-content.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.splash-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  animation: pulse 1s ease infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.splash-brand {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 56px;
+  color: #e8ff47;
+  letter-spacing: 6px;
+  margin-bottom: 8px;
+}
+
+.splash-tagline {
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  color: #555;
+  letter-spacing: 4px;
+  margin-bottom: 32px;
+  opacity: 0;
+  transition: opacity 0.5s ease 0.3s;
+}
+
+.splash-tagline.visible {
+  opacity: 1;
+}
+
+.splash-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  color: #444;
+  letter-spacing: 2px;
+  margin-bottom: 32px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.splash-stats.visible {
+  opacity: 1;
+}
+
+.stat-dot {
+  color: #2a2a2a;
+}
+
+.splash-bar {
+  width: 200px;
+  height: 2px;
+  background: #1a1a1a;
+  border-radius: 1px;
+  margin: 0 auto;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  overflow: hidden;
+}
+
+.splash-bar.visible {
+  opacity: 1;
+}
+
+.splash-bar-fill {
+  height: 100%;
+  background: #e8ff47;
+  border-radius: 1px;
+  animation: load 3s ease forwards;
+}
+
+@keyframes load {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
